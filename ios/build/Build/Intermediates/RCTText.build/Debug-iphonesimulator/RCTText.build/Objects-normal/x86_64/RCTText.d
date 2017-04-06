@@ -1,0 +1,21 @@
+dependencies: \
+  /Users/junj/horizons/Coup/BetaVuew12/node_modules/react-native/Libraries/Text/RCTText.m \
+  /Users/junj/horizons/Coup/BetaVuew12/node_modules/react-native/Libraries/Text/RCTText.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/junj/horizons/Coup/BetaVuew12/node_modules/react-native/Libraries/Text/RCTShadowText.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/junj/horizons/Coup/BetaVuew12/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h
