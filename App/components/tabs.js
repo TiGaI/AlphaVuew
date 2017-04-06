@@ -7,7 +7,7 @@ const { jumpTo } = navigationActions;
 import IndexPage from './index';
 import ProfilePage from './myProfilePage';
 import CreateEvent from './createEvent';
-import Notifications from './notifications';
+// import Notifications from './notifications';
 
 class ApplicationTabs extends Component {
 	_renderTabContent(tab) {
@@ -19,14 +19,14 @@ class ApplicationTabs extends Component {
 
 		if (tab.key === 'notifications') {
 			return (
-				<Notifications />
+				<CreateEvent />
 			);
 		}
 
 		if (tab.key === 'profile') {
 
 			return (
-				<CreateEvent />
+				<ProfilePage />
 			);
 		}
 

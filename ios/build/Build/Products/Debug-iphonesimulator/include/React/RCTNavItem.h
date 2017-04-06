@@ -38,6 +38,4 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onLeftButtonPress;
 @property (nonatomic, copy) RCTBubblingEventBlock onRightButtonPress;
 
-@property (nonatomic, assign) BOOL showTabBar;
-
 @end
