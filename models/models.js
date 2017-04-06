@@ -30,8 +30,6 @@ var userSchema = new mongoose.Schema({
     type: String
   },
   interestTags: [],
-  profileImages: [String],
-  profileVideo: [String],
   connections: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   rating: {
     type: Number
@@ -80,56 +78,12 @@ var activitySchema = new mongoose.Schema({
   interestUser: {
     type: String
   },
-  typeofRoom: {
-    type: String,
-    required: true
-  },
   activityCapacity: {
     type: Number,
     require: true
   }
 },
 { timestamps: true }
-);
-
-var messageSchema = new mongoose.Schema({
-  body: {
-    type: String,
-    required: true
-  },
-  toUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  fromUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  dateCreated :{
-    type: Date,
-    required: true
-  }
-});
-
-var friendRequestSchema = new mongoose.Schema({
-  toUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  fromUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  accepted :{
-    type: Boolean,
-    required: true
-  }
-},
-  { timestamps: true }
 );
 
 var activityActionSchema = new mongoose.Schema({
@@ -158,14 +112,10 @@ var activityActionSchema = new mongoose.Schema({
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
-var Message = mongoose.model("Message", messageSchema);
-var FriendRequest = mongoose.model("FriendRequest", friendRequestSchema);
 var ActivityAction = mongoose.model("ActivityAction", activityActionSchema);
 
 module.exports = {
   User: User,
   Activity: Activity,
-  Message: Message,
-  FriendRequest: FriendRequest,
   ActivityAction: ActivityAction
 };
