@@ -3,7 +3,6 @@ import { View, ActivityIndicator, AsyncStorage, StyleSheet, Text } from 'react-n
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/loginAction';
-// import SocketIOClient from 'socket.io-client';
 import Tabs from '../components/tabs';
 import Login from '../components/login'
 

@@ -1,4 +1,4 @@
 const { AppRegistry } = require('react-native');
-const AlphaVuew = require('./App/index');
+const BetaVuew = require('./App/index');
 
-AppRegistry.registerComponent('AlphaVuew', AlphaVuew);
+AppRegistry.registerComponent('BetaVuew', BetaVuew);
