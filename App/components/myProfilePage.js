@@ -16,7 +16,6 @@ import * as loginAction from '../actions/loginAction';
 
 import { connect } from 'react-redux';
 
-import CreateEvent from './createEvent';
 
 
 var image5 = {uri: 'https://www.thisiscolossal.com/wp-content/uploads/2016/03/finger-4.jpg'}
@@ -43,12 +42,6 @@ class ProfilePage extends Component{
       backgroundColor: 'white',
       justifyContent: 'center'
     }
-  }
-  addEvent(){
-    console.log('TRYING TO GO TO CREATE EVENT PAGE', this.props)
-    // this.props.navigator.replace({
-    //   component: CreateEvent
-    // })
   }
   addFriend(){
     const {userObject} = this.props.profile;

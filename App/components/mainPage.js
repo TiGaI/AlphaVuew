@@ -35,11 +35,10 @@ class MainPage extends Component {
 
   constructor(props){
     super(props);
-    console.log('MAIN PAGE PROPS', this.props)
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
-        longitude: LATITUDE,
+        longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
@@ -66,7 +65,7 @@ class MainPage extends Component {
 
       },
       (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 0}
     );
       this.watchID = navigator.geolocation.watchPosition((position) => {
       var currentPosition = JSON.stringify(position);
@@ -78,7 +77,6 @@ class MainPage extends Component {
       }});
 
     });
-
   }
   componentWillUnmount (){
   navigator.geolocation.clearWatch(this.watchID);
@@ -96,7 +94,10 @@ class MainPage extends Component {
     })
   }
   render() {
-
+    console.log('LAT initialPosition2', this.state.initialPosition.latitude )
+    console.log('LONG initialPosition2', this.state.initialPosition.longitude )
+    console.log('LAT currentPosition2', this.state.currentPosition.latitude )
+    console.log('LONG currentPosition2', this.state.currentPosition.longitude )
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
@@ -133,7 +134,6 @@ class MainPage extends Component {
           </TouchableOpacity>
         </View>
       </View>
-
       </MapView>
     ) : null}
       </View>
