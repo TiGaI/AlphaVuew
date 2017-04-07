@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
-  TextInput, TouchableOpacity, NavigatorIOS, ListView, Alert, AsyncStorage, Image } from 'react-native';
+  TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
 import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
 import Swiper from 'react-native-swiper'
 import randomcolor from 'randomcolor'
@@ -20,37 +20,75 @@ var image2 = {uri: 'https://static.pexels.com/photos/2855/landscape-mountains-na
 var image1 = {uri: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Two_dancers.jpg'}
 
 
-var events = ['Sport' , 'Art' , 'Music' ]
-Array.prototype.next = function(item) {
-  var length = this.length
-  if (item === null) {
-    return this[0];
-  }
-  var i = this.indexOf(item);
-  if (i === this.length - 1){
-    return this[0];
-  } else {
-    return this[(i + 1)];
-  }
-};
-Array.prototype.prev = function(item) {
-  if (item === null) {
-    return this[0];
-  }
-  var i = this.indexOf(item);
-  var length = this.length
-  if (i === 0){
-    return this[(length-1)];
-  } else {
-    return this[(i - 1)];
-  }
-};
+var { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+
+const LATITUDE = 1;
+const LONGITUDE = 1;
+
+const LATITUDE_DELTA = 0.009;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class MainPage extends Component {
+
   constructor(props){
     super(props);
     console.log('MAIN PAGE PROPS', this.props)
+    this.state = {
+      initialPosition: {
+        latitude: LATITUDE,
+        longitude: LATITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      },
+      currentPosition: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      },
+
+    }
   }
+  componentDidMount(){
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = JSON.stringify(position);
+        this.setState({initialPosition: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA
+
+        }});
+
+      },
+      (error) => alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+      this.watchID = navigator.geolocation.watchPosition((position) => {
+      var currentPosition = JSON.stringify(position);
+      this.setState({currentPosition: {
+        latitude: (position.coords.latitude) / 1.00022741,
+        longitude: position.coords.longitude - 0.001,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      }});
+      console.log('AFTER', this.state.currentPosition.latitude)
+      console.log('AFTER', this.state.currentPosition.longitude)
+      console.log('AFTER2', this.state.initialPosition.latitude)
+      console.log('AFTER2', this.state.initialPosition.longitude)
+    });
+
+    console.log('LATS', this.state.currentPosition.latitude);
+    console.log('LONGS', this.state.currentPosition.longitude);
+    console.log('LATITUDE_DELTA', this.state.currentPosition.latitudeDelta);
+    console.log('LONGITUDE_DELTA', this.state.currentPosition.longitudeDelta);
+
+  }
+  componentWillUnmount (){
+  navigator.geolocation.clearWatch(this.watchID);
+}
   category(){
     this.props.navigator.push({
       component: Categories,
@@ -60,33 +98,35 @@ class MainPage extends Component {
   render() {
 
     return(
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={{flex: 1}}>
+      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
 
       <MapView
        resizeMode = "stretch"
         style={{flex: 1, height: null, width: null, alignItems: 'center'}}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: this.state.currentPosition.latitude,
+          longitude: this.state.currentPosition.longitude,
+          latitudeDelta: this.state.currentPosition.latitudeDelta,
+          longitudeDelta: this.state.currentPosition.longitudeDelta,
         }}
       >
        <MapView.Marker
-         coordinate={{latitude: 37.78825,
-         longitude: -122.4324}}
+         coordinate={{latitude: this.state.currentPosition.latitude,
+         longitude: this.state.currentPosition.longitude}}
          title='Title'
       />
-      <View style={{flex: 1, alignItems: 'center'}}>
+      <View style={{flex: 0, alignItems: 'center'}}>
       <TouchableOpacity onPress={this.category.bind(this)}>
       <Text
       style={{borderColor: 'white', borderWidth: 1, marginTop: 150, backgroundColor: 'white', width: 275, padding: 15, color: 'grey', textAlign: 'center', fontSize: 18}}
       placeholder= 'Select a category'
-      >Find things to do...</Text>
+      >Find things to do... {this.state.lastPosition}</Text>
       </TouchableOpacity>
       </View>
 
       </MapView>
+    ) : null}
       </View>
     )
   }
