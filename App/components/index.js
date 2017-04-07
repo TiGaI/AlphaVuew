@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { NavigatorIOS, View } from 'react-native';
 
-import ActivitiesPage from './activitiesPage'
+import MainPage from './mainPage'
 
 export default class Index extends Component {
   render(){
@@ -12,8 +12,8 @@ export default class Index extends Component {
           <NavigatorIOS
           style={{flex: 1}}
           initialRoute={{
-              component: ActivitiesPage,
-              title: 'ActivitiesPage',
+              component: MainPage,
+              title: 'MainPage',
               showTabBar: true
             }}
             navigationBarHidden={false}>

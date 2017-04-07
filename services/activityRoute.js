@@ -42,61 +42,61 @@ router.post('/getMyActivitiesInfo', function(req, res) {
   });
 
 
-router.post('/createActivity', upload.single('file'), function(req, res){
-
-    var activity = req.body.activity;
-    console.log("this is the body: ", activity)
-    console.log("form Data", req.file)
-    Activity.findOne({$and: [{activityTitle: req.body.activityTitle},
-      {activityCreator: activity.activityCreator}]}, function(err, activityfind) {
-      if (err) {
-                return {err, user}
-      }
-
-    if(!activityfind){
-      console.log("Creating an activity")
-      var newActivity = new Activity({
-        activityCreator: activity.activityCreator,
-        activityTitle: activity.activityTitle,
-        activityImages: activity.activityImages,
-        activityDescription: activity.activityDescription,
-        typeofRoom: activity.typeofRoom,
-        activityCategory: activity.activityCategory,
-        timeStart: activity.timeStart,
-        timeEnd: activity.timeEnd,
-        activityImages: activity.activityImages ? activity.activityImages : ['http://www.bandartigiana.it/bnd/wp-content/uploads/2016/05/default-image.png'],
-        // activityVideo: req.files['video'] ? req.files['video'][0].location : '',
-        activityLocation: activity.activityLocation,
-        interestUser: [],
-        activityCapacity: activity.activityCapacity
-      })
-
-      newActivity.save(function(err, activityNew){
-        if (err) {
-          console.log('error has occur: ',  err)
-        } else {
-          console.log('Nice, you created a file')
-          console.log(activityNew);
-          User.findById(activityNew.activityCreator, function(err, user){
-            console.log(user)
-            user.activities = [...user.activities, ...[activityNew._id]]
-            user.save(function(err){
-              if (err) {
-                console.log('error has occur: ',  err)
-              } else {
-                console.log('Nice, activity added in the user model')
-              }
-            })
-          })
-
-        }
-      })
-    }else{
-      console.log('activity already exist!')
-    }
-
-  })
-});
+// router.post('/createActivity', upload.single('file'), function(req, res){
+//
+//     var activity = req.body.activity;
+//     console.log("this is the body: ", activity)
+//     console.log("form Data", req.file)
+//     Activity.findOne({$and: [{activityTitle: req.body.activityTitle},
+//       {activityCreator: activity.activityCreator}]}, function(err, activityfind) {
+//       if (err) {
+//                 return {err, user}
+//       }
+//
+//     if(!activityfind){
+//       console.log("Creating an activity")
+//       var newActivity = new Activity({
+//         activityCreator: activity.activityCreator,
+//         activityTitle: activity.activityTitle,
+//         activityImages: activity.activityImages,
+//         activityDescription: activity.activityDescription,
+//         typeofRoom: activity.typeofRoom,
+//         activityCategory: activity.activityCategory,
+//         timeStart: activity.timeStart,
+//         timeEnd: activity.timeEnd,
+//         activityImages: activity.activityImages ? activity.activityImages : ['http://www.bandartigiana.it/bnd/wp-content/uploads/2016/05/default-image.png'],
+//         // activityVideo: req.files['video'] ? req.files['video'][0].location : '',
+//         activityLocation: activity.activityLocation,
+//         interestUser: [],
+//         activityCapacity: activity.activityCapacity
+//       })
+//
+//       newActivity.save(function(err, activityNew){
+//         if (err) {
+//           console.log('error has occur: ',  err)
+//         } else {
+//           console.log('Nice, you created a file')
+//           console.log(activityNew);
+//           User.findById(activityNew.activityCreator, function(err, user){
+//             console.log(user)
+//             user.activities = [...user.activities, ...[activityNew._id]]
+//             user.save(function(err){
+//               if (err) {
+//                 console.log('error has occur: ',  err)
+//               } else {
+//                 console.log('Nice, activity added in the user model')
+//               }
+//             })
+//           })
+//
+//         }
+//       })
+//     }else{
+//       console.log('activity already exist!')
+//     }
+//
+//   })
+// });
 
 //populate activities by category
 
