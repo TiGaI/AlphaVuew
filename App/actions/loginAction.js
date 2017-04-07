@@ -45,6 +45,7 @@ function selectActivity(activityOwner, activity) {
     selectedActivityOwner: activityOwner
   }
 }
+
 function getInfo() {
     return new Promise((resolve, reject) => {
 
@@ -132,13 +133,19 @@ export function login() {
     };
 }
 
+export function skip() {
+    return dispatch => {
+        dispatch(attempt());
+        dispatch(skipLogin());
+    };
+}
+
 function facebookLogout() {
     return new Promise((resolve) => {
         LoginManager.logOut();
         return resolve();
     });
 }
-
 
 export function logout() {
     return dispatch => {
@@ -165,6 +172,12 @@ export function errors(err) {
 export function loggedin() {
     return {
         type: 'LOGIN',
+    };
+}
+
+export function skipLogin() {
+    return {
+        type: 'SKIP',
     };
 }
 

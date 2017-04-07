@@ -1,4 +1,5 @@
-export function loginReducer(state = {loading: false, loggedIn: false, error: null}, action) {
+export function loginReducer(state =
+  {loading: false, loggedIn: false, error: null, skip: false}, action) {
     switch (action.type) {
     case 'LOADING':
         return Object.assign({}, state, {
@@ -10,6 +11,14 @@ export function loginReducer(state = {loading: false, loggedIn: false, error: nu
             loading: false,
             loggedIn: true,
             error: null,
+        });
+
+    case 'SKIP':
+            return Object.assign({}, state, {
+                loading: false,
+                loggedIn: false,
+                error: null,
+                skip: true
         });
 
     case 'LOGOUT':

@@ -29,16 +29,12 @@ var userSchema = new mongoose.Schema({
   profileImg: {
     type: String
   },
-  interestTags: [],
-  connections: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  rating: {
-    type: Number
-  },
+  interestsTag: [],
   admin: {
     type: Boolean,
     default: false
   },
-  activities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}]
+  BTDTactivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}]
 },
 { timestamps: true }
 );
@@ -50,10 +46,7 @@ var activitySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  activityVideo: {
-    type: String
-  },
-  activityImages: [String],
+  activityImages: String,
   activityDescription: {
     type: String,
     default: "",
@@ -75,47 +68,16 @@ var activitySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  interestUser: {
-    type: String
-  },
-  activityCapacity: {
-    type: Number,
-    require: true
-  }
+  BTDTUser: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 },
 { timestamps: true }
 );
 
-var activityActionSchema = new mongoose.Schema({
-  fromUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  toUser: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'User'
-  },
-  activity: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: 'Activity'
-  },
-  accepted :{
-    type: Boolean,
-    required: true
-  }
-  },
-  { timestamps: true }
-);
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
-var ActivityAction = mongoose.model("ActivityAction", activityActionSchema);
 
 module.exports = {
   User: User,
-  Activity: Activity,
-  ActivityAction: ActivityAction
+  Activity: Activity
 };
