@@ -57,10 +57,12 @@ class ProfilePage extends Component{
   }
   render(){
     const {userObject} = this.props.profile;
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const dataSource = ds.cloneWithRows(userObject.activities);
+
 
     if(userObject){
+      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      const dataSource = ds.cloneWithRows(userObject.activities);
+
       const profileImg = userObject.profileImg;
       console.log('this is looking for the profile image',profileImg)
     }
@@ -144,7 +146,13 @@ class ProfilePage extends Component{
             </Swiper>
 
           </Swiper>
-) : null}
+) : (
+
+  <View>
+    <Text>You have not login yet</Text>
+  </View>
+
+)}
         </View>
     )
   }
@@ -156,7 +164,6 @@ function mapStateToProps(state) {
         login: state.get('login'),
         profile: state.get('profile'),
         activitiesPageState: state.get('activityPageState')
-
     };
 }
 

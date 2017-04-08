@@ -20,6 +20,14 @@ var authRoute = require('./services/authRoute');
 var activityRoute = require('./services/activityRoute');
 var actionRoute = require('./services/actionRoute');
 
+
+function updatedStatusOnMap() {
+    
+}
+updatedStatusOnMap(); //run function once on startup
+setInterval(updatedStatusOnMap, 5 * 60 * 1000)
+
+
 app.use(helmet());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,6 +38,9 @@ app.use(bodyParser.json());
 app.use('/', authRoute);
 app.use('/', activityRoute);
 app.use('/', actionRoute);
+
+
+
 
 var port = process.env.PORT || 8080;
 http.listen(port, function() {
