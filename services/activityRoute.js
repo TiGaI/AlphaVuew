@@ -20,7 +20,6 @@ function getRangeofLonLat(lon, lat, kilometer){
           maxLongitude: lon + 111.320*cos(lat + kilometer/110.574)}
 }
 
-
 router.post('/getPingsAroundMe', function(req, res){
 
     var range = getRangeofLonLat(req.body.lon. req.body.lat, 5);
@@ -41,7 +40,57 @@ router.post('/getPingsAroundMe', function(req, res){
     });
 });
 
-router.post('/', function(req, res){
+router.post('/createActivity', function(req, res){
+var activity = req.body.activity;
+  Activity.findOne({$and: [
+          {'activityLatitude': activity.activityLatitude},
+          {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){
+
+        if(err){
+          console.log(err);
+          res.send(err);
+          return err
+        }
+
+        if(!activities){
+          var newActivity = new Activity({
+                activityCreator: activity.activityCreator,
+                activityTitle: activity.activityTitle,
+                activityDescription: activity.activityDescription,
+                activityCategory: activity.activityCategory,
+                activityLatitude: activity.activityLatitude,
+                activityLongitude: activity.activityLongitude,
+                BTDTUser: []
+              })
+
+              newActivity.save(function(err, activityNew){
+                if (err) {
+                  console.log('error has occur: ',  err)
+                } else {
+                  console.log('Nice, you created a file')
+                  console.log(activityNew);
+                  User.findById(activityNew.activityCreator, function(err, user){
+                    console.log(user)
+                    user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
+                    user.save(function(err){
+                      if (err) {
+                        console.log('error has occur: ',  err)
+                      } else {
+                        console.log('Nice, activity added in the user model')
+                      }
+                    })
+                  })
+
+                }
+              })
+        }else{
+          console.log('activities already exist!');
+          return null;
+        }
+
+        res.send(activities);
+        return activities;
+  });
 
 });
 

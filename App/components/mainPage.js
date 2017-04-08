@@ -33,8 +33,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class MainPage extends Component {
 
+
   constructor(props){
     super(props);
+      console.log('MAINPAGE PROPSSSSSS', this.props);
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
@@ -98,10 +100,10 @@ class MainPage extends Component {
     })
   }
   render() {
-    console.log('LAT initialPosition2', this.state.initialPosition.latitude )
-    console.log('LONG initialPosition2', this.state.initialPosition.longitude )
-    console.log('LAT currentPosition2', this.state.currentPosition.latitude )
-    console.log('LONG currentPosition2', this.state.currentPosition.longitude )
+    // console.log('LAT initialPosition2', this.state.initialPosition.latitude )
+    // // console.log('LONG initialPosition2', this.state.initialPosition.longitude )
+    // console.log('LAT currentPosition2', this.state.currentPosition.latitude )
+    // console.log('LONG currentPosition2', this.state.currentPosition.longitude )
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
@@ -133,7 +135,7 @@ class MainPage extends Component {
       >Find things to do... {this.state.lastPosition}</Text>
       </TouchableOpacity>
       </View>
-      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+      {this.props.profile.userObject !== null ? (<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
         <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' }}>Add Location</Text>
         <View style={{flex: 0, marginBottom: 60, backgroundColor: '#00A8BE', width: 50, height: 50,
         alignItems: 'center', justifyContent: 'center', borderRadius: 25}}>
@@ -141,7 +143,8 @@ class MainPage extends Component {
             <Icon style={{fontSize: 35, color: 'white'}} name='md-add'/>
           </TouchableOpacity>
         </View>
-      </View>
+      </View>) : null }
+
       </MapView>
     ) : null}
       </View>
@@ -174,7 +177,7 @@ class Categories extends Component {
       dataSource: ds.cloneWithRows(sports),
 
     }
-  
+
   }
   selectCategory(rowData){
     console.log('Categories', rowData)

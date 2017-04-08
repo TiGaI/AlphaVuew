@@ -62,7 +62,7 @@ class ProfilePage extends Component{
 
 
     return (
-        <View>
+        <View style={{flex: 1}}>
         { userObject !== null ? (  <Swiper
             loop={false}
             showsPagination={false}
@@ -81,55 +81,13 @@ class ProfilePage extends Component{
                       <Thumbnail style={{marginTop: 10, height: 100, width: 100, borderRadius: 50}} source={{uri: userObject.profileImg }} />
                       <Text style={{textAlign: 'center', fontWeight: '400', fontSize: 25, marginTop: 5}}>{userObject.firstName + " " + userObject.lastName}</Text>
                       <View style={{flex: 1, flexDirection: 'row'}}>
-                        <TouchableOpacity style={{flex: 1}} onPress={this.addEvent.bind(this)}>
+                        <TouchableOpacity style={{flex: 1}}>
                         <View style={{flex: 1, backgroundColor: '#00A8BE', alignItems: 'center', padding: 12,
                          margin: 20, borderRadius: 35}}>
                          <Text style={{color: 'white', fontWeight: '500', letterSpacing: 1}}>CREATE EVENT</Text>
                          </View>
                           </TouchableOpacity>
                       </View>
-                      <View style={{flex:1, flexDirection: 'row'}}>
-                        <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', padding: 10,
-                      borderColor: 'lightgrey', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderRightWidth: 0,marginLeft: 10}}>
-                          <Text>{userObject.connections.length}</Text>
-                          <Text style={{fontSize: 12, color: 'grey'}}>FOLLOWERS</Text>
-                        </View>
-                        <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', padding: 10,
-                      borderColor: 'lightgrey', borderStyle: 'solid', borderWidth: 1}}>
-                          <Text>{userObject.activities.length}</Text>
-                          <Text style={{fontSize: 12, color: 'grey'}}>EVENTS</Text>
-                        </View>
-                        <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', padding: 10,
-                      borderColor: 'lightgrey', borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderLeftWidth: 0, marginRight: 10}}>
-                          <Text>{userObject.connections.length}</Text>
-                          <Text style={{fontSize: 12, color: 'grey'}}>FOLLOWING</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <TouchableOpacity style={{flex: 1}} onPress={this.border}>
-                        <View style={{flex: 1, margin: 10, marginTop: 20}}><Text style={{fontSize: 12, color: 'grey', textAlign: 'center'}}>MY EVENTS</Text></View>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={{flex: 1}} onPress={this.border}>
-                        <View style={{flex: 1, margin: 10, marginTop: 20}}><Text style={{fontSize: 12, color: 'grey', textAlign: 'center'}}>IMAGES</Text></View>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={{flex:1, padding: 20, marginTop:-10}}>
-                      <ListView
-                      dataSource = {dataSource}
-                      renderRow={(rowData) =>
-                        <TouchableOpacity >
-                        <Image source={{uri: 'https://iso.500px.com/wp-content/uploads/2016/04/STROHL__ST_1204-Edit-1500x1000.jpg'}} resizeMode="stretch" style={{width:150, height:150, marginRight: 10, justifyContent:'flex-end', alignItems:'center', padding: 15}}>
-                        </Image>
-                        <Text style={{backgroundColor:'rgba(0,0,0,0)', textAlign:'left', color:'black', fontSize:17, fontWeight:'500'}}>{rowData.activityTitle}</Text>
-
-                        </TouchableOpacity>
-                      }
-                      horizontal = {true}
-                      showsHorizontalScrollIndicator = {false}
-                      onEndReachedThreshold = {500}
-                      />
-
                     </View>
                   </Content>
                 </Container>
@@ -141,8 +99,8 @@ class ProfilePage extends Component{
           </Swiper>
 ) : (
 
-  <View>
-    <Text>You have not login yet</Text>
+  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <Text style={{fontSize: 20, color: 'black'}}>Login to view profile</Text>
   </View>
 
 )}

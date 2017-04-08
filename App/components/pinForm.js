@@ -149,8 +149,9 @@ import { AppRegistry, ScrollView, StyleSheet,
         var value = this.refs.form.getValue();
         if (value) {
           var activityObject = Object.assign({}, value);
-          activityObject.latitude = this.props.latitude;
-          activityObject.longitude = this.props.longitude;
+          activityObject.activitycLatitude = this.props.latitude;
+          activityObject.activitycLongitude = this.props.longitude;
+          activityObject.activitycCreator = this.props.profile.userObject._id;  
 
 
         this.props.actions.createActivity(activityObject)

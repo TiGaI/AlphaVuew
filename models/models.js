@@ -34,7 +34,8 @@ var userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  BTDTactivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}]
+  BTDTactivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}],
+  createdActivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}],
 },
 { timestamps: true }
 );
@@ -52,19 +53,15 @@ var activitySchema = new mongoose.Schema({
     default: "",
     required: true
   },
-  activityLocation: {
-    type: String,
+  activityLatitude: {
+    type: Number,
+    required: true
+  },
+  activityLongitude: {
+    type: Number,
     required: true
   },
   activityCategory:{
-    type: String,
-    required: true
-  },
-  timeStart: {
-    type: String,
-    required: true
-  },
-  timeEnd: {
     type: String,
     required: true
   },
@@ -73,11 +70,28 @@ var activitySchema = new mongoose.Schema({
 { timestamps: true }
 );
 
+var actionsSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  activity: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Activity'
+  }
+  },
+  { timestamps: true }
+);
+
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
+var Action = mongoose.model("Action", actionsSchema);
 
 module.exports = {
   User: User,
-  Activity: Activity
+  Activity: Activity,
+  Action: Action
 };

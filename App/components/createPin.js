@@ -29,7 +29,8 @@ class CreatePin extends Component {
 
   constructor(props){
     super(props);
-    console.log('MAIN PAGE PROPS', this.props)
+    console.log('CREATE PAGE PROPS', this.props)
+    // console.log('USER ID', this.props.profile.userObject._id)
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
