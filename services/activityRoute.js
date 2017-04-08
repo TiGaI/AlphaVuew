@@ -42,7 +42,7 @@ router.post('/getPingsAroundMe', function(req, res){
 });
 
 router.post('/createActivity', function(req, res){
-
+var activity = req.body.activity;
   Activity.findOne({$and: [
           {'activityLocation.latitude': req.body.activityLocation.latitude},
           {'activityLocation.longitude': req.body.activityLocation.longitude}]}).exec(function(err, activities){

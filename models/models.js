@@ -74,11 +74,28 @@ var activitySchema = new mongoose.Schema({
 { timestamps: true }
 );
 
+var actionsSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  activity: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Activity'
+  }
+  },
+  { timestamps: true }
+);
+
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
+var Action = mongoose.model("Action", actionsSchema);
 
 module.exports = {
   User: User,
-  Activity: Activity
+  Activity: Activity,
+  Action: Action
 };
