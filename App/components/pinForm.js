@@ -2,28 +2,30 @@ import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet,
   Text, View, TextInput, TouchableOpacity, NavigatorIOS,
   ListView, Alert, AsyncStorage, TouchableHighlight, ImagePickerIOS, Image } from 'react-native';
-  import { Container, Content, Left, Body, Header, Right, ListItem, Thumbnail, Card, Title, CardItem, Icon, Item, Input, Label,  Button} from 'native-base';
+  import { Container, Content, Left, Body, Header, Right, ListItem, Thumbnail, Card, Title, CardItem, Item, Input, Label,  Button} from 'native-base';
   import { connect } from 'react-redux';
   import Swiper from 'react-native-swiper';
   import { bindActionCreators } from 'redux';
   import randomcolor from 'randomcolor';
   import * as actionCreators from '../actions/initialAction';
   import * as loginAction from '../actions/loginAction';
+  import Icon from 'react-native-vector-icons/Ionicons';
 
   var t = require('tcomb-form-native');
   var Form = t.form.Form;
 
   const nameofthecategory = t.enums.of([
-    'Music',
-    'Art',
-    'Sport'
+    'Baseball',
+    'Basketball',
+    'Beach Volleyball',
+    'Hiking',
+    'Running',
+    'Soccer',
+    'Tennis'
+
   ], 'nameofthecategory');
 
-  const typeofroom = t.enums.of([
-    'Public',
-    'Private',
-    'Public - Friend Join Only'
-  ], 'typeofroom');
+
 
   var capacity = t.refinement(t.Number, function (n) { return n > 0; });
 
@@ -34,12 +36,7 @@ import { AppRegistry, ScrollView, StyleSheet,
   var Activity = t.struct({
     activityTitle: t.String,
     activityDescription: t.String,
-    activityLocation: t.String,
-    activityCategory: nameofthecategory,
-    timeStart: t.Date,
-    timeEnd: t.Date,
-    typeofRoom: typeofroom,
-    activityCapacity: capacity
+    activityCategory: nameofthecategory
   });
 
   var options = {
@@ -52,21 +49,27 @@ import { AppRegistry, ScrollView, StyleSheet,
   };
 
 
-  var CreateEvent = React.createClass({
+  var PinForm = React.createClass({
 
     getInitialState() {
+      console.log('PROPS TEST', this.props)
       return {
         value: {
           activityTitle: "",
           activityDescription: "",
-          actvityLocation: "",
-          activityCategory: "",
-          typeofRoom: "",
-          actvityCapacity: ""
+          activityCategory: ""
+        },
+        position: {
+          latitude: this.props.latitude,
+          longitude: this.props.longitude
         },
         photoData: null
       };
     },
+
+    submitForm(){
+    },
+
 
     pickImage() {
       // openSelectDialog(config, successCallback, errorCallback);
@@ -105,55 +108,52 @@ import { AppRegistry, ScrollView, StyleSheet,
       },
 
       onPress: function (){
-        var self = this
-        console.log("PHotoData", self.state.photoData)
-        var s3 = function(self){
-          console.log("IN S3")
-          return fetch('http://localhost:8080/postToS3', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              body: photo
-            })
-            .then(resp => resp.json())
-            .then(resp => {
-              console.log('success upload', resp.file.location);
-              copy["activityImages"] = [resp.file.location];
-              return copy;
-            })
-        }
-        var createActivity = function() {
-          console.log("CreactActivity", copy)
-          return fetch("http://localhost:8080/createActivity", {
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              activity: copy
-            })
-          })
-        }
-        var doMyShit = function(photoAdded){
-          console.log("IS PHOTO ADDED", photoAdded)
-          if (photoAdded){
-            return s3(self).then(createActivity).catch((resp => console.log('err upload', resp)));
-          } else {
-            return createActivity().catch((resp => console.log('err upload', resp)));
-          }
-        }
+        // var self = this
+        // console.log("PHotoData", self.state.photoData)
+        // var s3 = function(self){
+        //   console.log("IN S3")
+        //   return fetch('http://localhost:8080/postToS3', {
+        //       method: 'POST',
+        //       headers: {
+        //         'Content-Type': 'multipart/form-data'
+        //       },
+        //       body: photo
+        //     })
+        //     .then(resp => resp.json())
+        //     .then(resp => {
+        //       console.log('success upload', resp.file.location);
+        //       copy["activityImages"] = [resp.file.location];
+        //       return copy;
+        //     })
+        // }
+        // var createActivity = function() {
+        //   console.log("CreactActivity", copy)
+        //   return fetch("http://localhost:8080/createActivity", {
+        //     method: 'POST',
+        //     headers: {
+        //       "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //       activity: copy
+        //     })
+        //   })
+        // }
+        // var doMyShit = function(photoAdded){
+        //   console.log("IS PHOTO ADDED", photoAdded)
+        //   if (photoAdded){
+        //     return s3(self).then(createActivity).catch((resp => console.log('err upload', resp)));
+        //   } else {
+        //     return createActivity().catch((resp => console.log('err upload', resp)));
+        //   }
+        // }
         var value = this.refs.form.getValue();
         if (value) {
-          var copy = Object.assign({}, value);
-          copy["activityCreator"] = this.props.profile.userObject._id
-          var photoAdded = (!!this.state.photoData);
-          if (photoAdded) {
-            var photo = this.state.photoData;
-          }
-          this.setState({value: null, photoData: null});
-          console.log(photoAdded)
-          doMyShit(photoAdded);
+          var activityObject = Object.assign({}, value);
+          activityObject.latitude = this.props.latitude;
+          activityObject.longitude = this.props.longitude;
+
+
+        this.props.actions.createActivity(activityObject)
 
         }
         //   fetch('http://localhost:8080/postToS3', {
@@ -188,7 +188,7 @@ import { AppRegistry, ScrollView, StyleSheet,
         const { profile } = this.props;
         return(
           <View style={styles.container}>
-          <Text style={{fontSize: 25, fontWeight: '700', color: '#323232', marginTop: 20}}>Create An Activity </Text>
+          <Text style={{fontSize: 25, fontWeight: '700', color: '#323232', margin: 20, textAlign: 'center'}}>Pin a location </Text>
           <ScrollView keyboardShouldPersistTaps="always" style={{paddingLeft:10,paddingRight:10, height:500}}>
           <Form
           ref="form"
@@ -197,12 +197,21 @@ import { AppRegistry, ScrollView, StyleSheet,
           value={this.state.value}
           onChange ={this.onChange.bind(this)}
           />
-          <TouchableHighlight style={styles.button} onPress={this.pickImage} underlayColor = '#99d9f4'>
-          <Text style={styles.buttonText}>Upload Photo</Text>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
-          <Text style={styles.buttonText}>Save</Text>
-          </TouchableHighlight>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+          <TouchableOpacity style={{flex: 1, backgroundColor: 'white' ,borderWidth: 2, borderColor: 'grey', height: 70, borderRightWidth: 0}} onPress={this.pickImage}>
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Icon style={{fontSize: 35, color: 'grey'}} name='md-camera'/>
+          <Text style={{color: 'grey'}}>Upload Photo</Text>
+          </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={{flex: 1, backgroundColor: 'white' ,borderWidth: 2, borderColor: 'grey', height: 70}} onPress={this.onPress}>
+          <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Icon style={{fontSize: 35, color: 'grey'}} name='md-checkmark-circle'/>
+          <Text style={{color: 'grey'}}>Submit</Text>
+          </View>
+          </TouchableOpacity>
+          </View>
+
           </ScrollView>
 
           </View>
@@ -223,22 +232,8 @@ import { AppRegistry, ScrollView, StyleSheet,
         fontSize: 30,
         alignSelf: 'center',
         marginBottom: 30
-      },
-      buttonText: {
-        fontSize: 18,
-        color: 'white',
-        alignSelf: 'center'
-      },
-      button: {
-        height: 36,
-        backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        borderWidth: 1,
-        borderRadius: 8,
-        marginBottom: 10,
-        alignSelf: 'stretch',
-        justifyContent: 'center'
       }
+
     });
 
     function mapStateToProps(state) {
@@ -256,4 +251,4 @@ import { AppRegistry, ScrollView, StyleSheet,
       };
     }
 
-    export default connect(mapStateToProps, mapDispatchToProps)(CreateEvent);
+    export default connect(mapStateToProps, mapDispatchToProps)(PinForm);
