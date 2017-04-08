@@ -2,7 +2,7 @@ export function populatedActivities(state = {
   nav: "ActivitiesPage",
   fetchingData: false,
   populatedActivities: [],
-  categories: []
+  categories: ['Baseball','Basketball', 'Beach Volleyball' ,'Hiking', 'Running', 'Soccer','Tennis']
 }, action) {
     switch (action.type) {
     case 'POPULATED_ACTIVITIES':
@@ -18,11 +18,16 @@ export function populatedActivities(state = {
           return Object.assign({}, state, {
               fetchingData: false
           })
-    case "SELECT_ACTIVITY":
+    case "SELECT_POINT":
       return Object.assign({}, state, {
         selectedActivity: action.selectedActivity,
         selectedActivityOwner: action.selectedActivityOwner
       })
+    case "SELECT_CATEGORY":
+        return Object.assign({}, state, {
+          category: action.category
+        })
+
 
     default:
         return state;
