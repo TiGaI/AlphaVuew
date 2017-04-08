@@ -23,6 +23,22 @@ export function BTDT(activityID, userID) {
     };
 }
 
+export function createActivity(activityObject) {
+    return dispatch => {
+        fetch('http://localhost:8080/createActivity', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                activity: activityObject
+              })
+            })
+            .catch((err) => {
+              console.log('error in createActivity -> ', err)
+            });
+    };
+}
 
 function fetching(){
   return {

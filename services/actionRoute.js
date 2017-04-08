@@ -15,8 +15,9 @@ router.post('/BTDT', function(req, res){
   Activity.findById(req.body.activityID, function(err, activity) {
 
     if (err) {
-          return {err, activity}
+        return {err, activity}
     }
+
     if(activity){
       activity.BTDTUser = [...activity.BTDTUser, ...[req.body.userID]]
       activity.save(function(err, activity){

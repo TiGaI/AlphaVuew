@@ -3,7 +3,6 @@ import {populatedActivities} from './initialReducer';
 import {loginReducer, profileReducer} from './loginReducer';
 import { combineReducers } from 'redux-immutable';
 
-
 const applicationReducers = {
 	login: loginReducer,
 	profile: profileReducer,

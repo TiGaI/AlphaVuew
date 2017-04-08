@@ -31,9 +31,6 @@ class Login extends Component {
           />
 
         </View>
-
-
-
       </View>
     )
   }
@@ -55,7 +52,8 @@ const styles = StyleSheet.create({
 })
 
 Login.propTypes = {
-    onPress: PropTypes.func.isRequired
+    facebook: PropTypes.func.isRequired,
+    onSkip: PropTypes.func.isRequired
 };
 
 export default Login;
