@@ -22,7 +22,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
-const LATITUDE_DELTA = 0.009;
+const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class CreatePin extends Component {
@@ -80,7 +80,11 @@ class CreatePin extends Component {
 createPin(){
     this.props.navigator.push({
       component: PinForm,
-      backButtonTitle: 'CreatePin'
+      backButtonTitle: 'CreatePin',
+      passProps: {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude
+      }
     })
   }
   render() {
@@ -102,16 +106,15 @@ createPin(){
        <MapView.Marker draggable
          coordinate={{latitude: this.state.currentPosition.latitude,
          longitude: this.state.currentPosition.longitude}}
-         title='Pin 1'
+         title='New Pin'
 
          onDrag={(e) => this.setState({ latitude: e.nativeEvent.coordinate.latitude,
            longitude: e.nativeEvent.coordinate.longitude,
           })}
-                 onDragEnd={ (e) =>  console.log('EEEEEE',e.nativeEvent.coordinate) }
       />
         <View style={{flex: 0, marginBottom: 60, backgroundColor: 'black', width: null, height: null,
         alignItems: 'center', justifyContent: 'center', borderRadius: 15, opacity: 0.9, padding: 15}}>
-          <Text style={{color: 'white'}}>{ this.state.currentPosition.latitude + ',' +  this.state.currentPosition.longitude}</Text>
+          <Text style={{color: 'white'}}>{ this.state.latitude + ',' +  this.state.longitude}</Text>
           <TouchableOpacity onPress={this.createPin.bind(this)}>
             <Text style={{color: 'white', fontWeight: '500'}}>Confirm Pin Location</Text>
           </TouchableOpacity>

@@ -90,7 +90,11 @@ class MainPage extends Component {
   createPin(){
     this.props.navigator.push({
       component: CreatePin,
-      backButtonTitle: 'MainPage'
+      backButtonTitle: 'MainPage',
+      passProps: {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude
+      }
     })
   }
   render() {
@@ -160,6 +164,8 @@ var sports = [{name: 'Baseball',
                iconName: 'ios-football'},
                {name: 'Tennis',
              iconName: 'ios-tennisball'}];
+
+
 class Categories extends Component {
   constructor(props){
     super(props);
@@ -168,6 +174,7 @@ class Categories extends Component {
       dataSource: ds.cloneWithRows(sports),
 
     }
+  
   }
   selectCategory(rowData){
     console.log('Categories', rowData)

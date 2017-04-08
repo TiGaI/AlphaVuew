@@ -26,6 +26,7 @@ import { AppRegistry, ScrollView, StyleSheet,
   ], 'nameofthecategory');
 
 
+
   var capacity = t.refinement(t.Number, function (n) { return n > 0; });
 
   capacity.getValidationErrorMessage = function (value, path, context) {
@@ -51,16 +52,24 @@ import { AppRegistry, ScrollView, StyleSheet,
   var PinForm = React.createClass({
 
     getInitialState() {
+      console.log('PROPS TEST', this.props)
       return {
         value: {
           activityTitle: "",
           activityDescription: "",
-          activityCategory: "",
-          actvityCapacity: ""
+          activityCategory: ""
+        },
+        position: {
+          latitude: this.props.latitude,
+          longitude: this.props.longitude
         },
         photoData: null
       };
     },
+
+    submitForm(){
+    },
+
 
     pickImage() {
       // openSelectDialog(config, successCallback, errorCallback);
@@ -99,55 +108,52 @@ import { AppRegistry, ScrollView, StyleSheet,
       },
 
       onPress: function (){
-        var self = this
-        console.log("PHotoData", self.state.photoData)
-        var s3 = function(self){
-          console.log("IN S3")
-          return fetch('http://localhost:8080/postToS3', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              },
-              body: photo
-            })
-            .then(resp => resp.json())
-            .then(resp => {
-              console.log('success upload', resp.file.location);
-              copy["activityImages"] = [resp.file.location];
-              return copy;
-            })
-        }
-        var createActivity = function() {
-          console.log("CreactActivity", copy)
-          return fetch("http://localhost:8080/createActivity", {
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              activity: copy
-            })
-          })
-        }
-        var doMyShit = function(photoAdded){
-          console.log("IS PHOTO ADDED", photoAdded)
-          if (photoAdded){
-            return s3(self).then(createActivity).catch((resp => console.log('err upload', resp)));
-          } else {
-            return createActivity().catch((resp => console.log('err upload', resp)));
-          }
-        }
+        // var self = this
+        // console.log("PHotoData", self.state.photoData)
+        // var s3 = function(self){
+        //   console.log("IN S3")
+        //   return fetch('http://localhost:8080/postToS3', {
+        //       method: 'POST',
+        //       headers: {
+        //         'Content-Type': 'multipart/form-data'
+        //       },
+        //       body: photo
+        //     })
+        //     .then(resp => resp.json())
+        //     .then(resp => {
+        //       console.log('success upload', resp.file.location);
+        //       copy["activityImages"] = [resp.file.location];
+        //       return copy;
+        //     })
+        // }
+        // var createActivity = function() {
+        //   console.log("CreactActivity", copy)
+        //   return fetch("http://localhost:8080/createActivity", {
+        //     method: 'POST',
+        //     headers: {
+        //       "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //       activity: copy
+        //     })
+        //   })
+        // }
+        // var doMyShit = function(photoAdded){
+        //   console.log("IS PHOTO ADDED", photoAdded)
+        //   if (photoAdded){
+        //     return s3(self).then(createActivity).catch((resp => console.log('err upload', resp)));
+        //   } else {
+        //     return createActivity().catch((resp => console.log('err upload', resp)));
+        //   }
+        // }
         var value = this.refs.form.getValue();
         if (value) {
-          var copy = Object.assign({}, value);
-          copy["activityCreator"] = this.props.profile.userObject._id
-          var photoAdded = (!!this.state.photoData);
-          if (photoAdded) {
-            var photo = this.state.photoData;
-          }
-          this.setState({value: null, photoData: null});
-          console.log(photoAdded)
-          doMyShit(photoAdded);
+          var activityObject = Object.assign({}, value);
+          activityObject.latitude = this.props.latitude;
+          activityObject.longitude = this.props.longitude;
+
+
+        this.props.actions.createActivity(activityObject)
 
         }
         //   fetch('http://localhost:8080/postToS3', {
