@@ -6,7 +6,6 @@ import { actions as navigationActions } from 'react-native-navigation-redux-help
 const { jumpTo } = navigationActions;
 import IndexPage from './index';
 import ProfilePage from './myProfilePage';
-import CreateEvent from './createEvent';
 import Notifications from './notifications';
 
 class ApplicationTabs extends Component {

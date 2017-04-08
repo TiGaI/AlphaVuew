@@ -15,12 +15,7 @@ class Notifications extends Component{
   constructor(props){
     super(props);
   }
-  render(){
 
-
-    return (
-
-)}
 }
 
 function mapStateToProps(state) {
