@@ -107,7 +107,7 @@ createPin(){
          onDrag={(e) => this.setState({ latitude: e.nativeEvent.coordinate.latitude,
            longitude: e.nativeEvent.coordinate.longitude,
           })}
-          onDragEnd={console.log('onDragEnd', e)}
+                 onDragEnd={ (e) =>  console.log('EEEEEE',e.nativeEvent.coordinate) }
       />
         <View style={{flex: 0, marginBottom: 60, backgroundColor: 'black', width: null, height: null,
         alignItems: 'center', justifyContent: 'center', borderRadius: 15, opacity: 0.9, padding: 15}}>
