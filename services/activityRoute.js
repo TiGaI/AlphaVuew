@@ -41,7 +41,56 @@ router.post('/getPingsAroundMe', function(req, res){
     });
 });
 
-router.post('/', function(req, res){
+router.post('/createActivity', function(req, res){
+
+  Activity.findOne({$and: [
+          {'activityLocation.latitude': req.body.activityLocation.latitude},
+          {'activityLocation.longitude': req.body.activityLocation.longitude}]}).exec(function(err, activities){
+
+        if(err){
+          console.log(err);
+          res.send(err);
+          return err
+        }
+
+        if(!activities){
+          var newActivity = new Activity({
+                activityCreator: activity.activityCreator,
+                activityTitle: activity.activityTitle,
+                activityDescription: activity.activityDescription,
+                activityCategory: activity.activityCategory,
+                activityLocation: activity.activityLocation,
+                BTDTUser: []
+              })
+
+              newActivity.save(function(err, activityNew){
+                if (err) {
+                  console.log('error has occur: ',  err)
+                } else {
+                  console.log('Nice, you created a file')
+                  console.log(activityNew);
+                  User.findById(activityNew.activityCreator, function(err, user){
+                    console.log(user)
+                    user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
+                    user.save(function(err){
+                      if (err) {
+                        console.log('error has occur: ',  err)
+                      } else {
+                        console.log('Nice, activity added in the user model')
+                      }
+                    })
+                  })
+
+                }
+              })
+        }else{
+          console.log('activities already exist!');
+          return null;
+        }
+
+        res.send(activities);
+        return activities;
+  });
 
 });
 

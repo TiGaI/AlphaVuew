@@ -14,7 +14,6 @@ export function BTDT(activityID, userID) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-
                 dispatch(doneFetching())
             })
             .catch((err) => {

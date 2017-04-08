@@ -34,7 +34,8 @@ var userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  BTDTactivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}]
+  BTDTactivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}],
+  createdActivities: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}],
 },
 { timestamps: true }
 );
