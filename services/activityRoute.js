@@ -25,8 +25,9 @@ router.post('/getPingsAroundMe', function(req, res){
     var range = getRangeofLonLat(req.body.lon. req.body.lat, 5);
 
     Activity.find({$and: [
-          {'activityLocation.latitude': {'$gte': range.minLatitude, '$lt': range.maxLatitude}},
-          {'activityLocation.longitude': {'$gte': range.minLongitude, '$lt': range.maxLongitude}},
+          {'activityLatitude': {'$gte': range.minLatitude, '$lt': range.maxLatitude}},
+          {'activityLongitude': {'$gte': range.minLongitude, '$lt': range.maxLongitude}},
+          {'activityCategory': {$in : req.body.category}}
         ]}).exec(function(err, activities){
 
           if(err){
@@ -34,6 +35,13 @@ router.post('/getPingsAroundMe', function(req, res){
             res.send(err);
             return err
           }
+
+          activities.map((activity, index) => {
+
+              
+
+          })
+
 
           res.send(activities);
           return activities;
@@ -70,7 +78,6 @@ var activity = req.body.activity;
                   console.log('Nice, you created a file')
                   console.log(activityNew);
                   User.findById(activityNew.activityCreator, function(err, user){
-                    console.log(user)
                     user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
                     user.save(function(err){
                       if (err) {

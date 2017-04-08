@@ -65,7 +65,8 @@ var activitySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  BTDTUser: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+  BTDTUser: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+  checkInUser: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 },
 { timestamps: true }
 );
