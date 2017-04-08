@@ -1,16 +1,39 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity
+  StyleSheet, Text, View
 } from 'react-native';
+import { Button, SocialIcon } from 'react-native-elements'
 
 class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.props.onPress}>
-                <Text style={{backgroundColor: '#00A8BE',
-                color: 'white', fontSize: 20, borderWidth: 3, borderColor: 'white', padding: 20, borderRadius: 5}}> Login With Facebook </Text>
-        </TouchableOpacity>
+      <View style={styles.container}>
+      <Button
+        large
+        raisesd
+        onPress={this.props.onSkip}
+        borderRadius={32}
+        title='      Skip It      ' />
+      </View>
+
+        <View style={styles.socialContainer}>
+
+          <SocialIcon
+            light
+            type='facebook'
+            onPress={this.props.facebook}
+          />
+
+          <SocialIcon
+            light
+            type='google'
+          />
+
+        </View>
+
+
+
       </View>
     )
   }
@@ -22,7 +45,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#00A8BE'
+    backgroundColor: '#141515'
+  },
+  socialContainer:{
+    flex: 1,
+    flexDirection: 'row',
+
   }
 })
 

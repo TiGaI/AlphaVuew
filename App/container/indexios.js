@@ -18,26 +18,10 @@ const styles = StyleSheet.create({
 })
 
 class AlphaVuew extends Component {
-  componentDidMount() {
-
-      AsyncStorage.getItem('user')
-          .then(result => {
-            console.log('PROPS', this.props);
-            console.log('NAV', navigator);
-            var parsedResult = JSON.parse(result);
-            var token = parsedResult.token;
-            if (token) {
-              this.props.navigator.push({
-               component: Swipe,
-               title: "Main"
-              });
-            }
-          }).catch(err => {console.log('error', err)})
-    }
   render() {
         const { actions, login, profile } = this.props;
         let tabsComponent = <Tabs onPress={() => actions.logout()} profile={profile} />;
-        let loginComponent = <Login onPress={() => actions.login()} />;
+        let loginComponent = <Login facebook={() => actions.login()} onSkip={() => actions.skip()} />;
 
         if(login.error) {
             loginComponent = <View><Login onPress={() => actions.login()} /><Text style={styles.text}>{login.error}</Text></View>;
@@ -50,7 +34,7 @@ class AlphaVuew extends Component {
 
         return (
             <View style={styles.wrapper}>
-            { login.loggedIn ? tabsComponent : loginComponent }
+            { login.loggedIn || login.skip ? tabsComponent : loginComponent }
             </View>
         );
   }

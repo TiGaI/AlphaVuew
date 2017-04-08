@@ -119,7 +119,7 @@ class MainPage extends Component {
          longitudeDelta: this.state.currentPosition.longitudeDelta,
          }}
          title='Title'
-  
+
       />
       <View style={{flex: 0, alignItems: 'center'}}>
       <TouchableOpacity onPress={this.category.bind(this)}>
