@@ -2,12 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry, ScrollView, StyleSheet, View, TextInput, TouchableOpacity, NavigatorIOS,
   ListView, Alert, Image } from 'react-native';
-import { Container, Content, Left, Body, Right, Text, ListItem, Thumbnail, Card, CardItem, Button, Tabs, Tab } from 'native-base';
+import { Container, Content, Left, Body, Right, Text, ListItem, Thumbnail, Card, CardItem, Tabs, Tab } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Swiper from 'react-native-swiper'
-import styles from './styles'
+import Swiper from 'react-native-swiper';
+import styles from './styles';
 
 import MapView from 'react-native-maps';
+import { Button, SocialIcon } from 'react-native-elements'
 import randomcolor from 'randomcolor';
 
 import { bindActionCreators } from 'redux';
@@ -16,7 +17,6 @@ import * as loginAction from '../actions/loginAction';
 
 import { connect } from 'react-redux';
 
-import CreateEvent from './createEvent';
 
 
 var image5 = {uri: 'https://www.thisiscolossal.com/wp-content/uploads/2016/03/finger-4.jpg'}
@@ -44,12 +44,6 @@ class ProfilePage extends Component{
       justifyContent: 'center'
     }
   }
-  addEvent(){
-    console.log('TRYING TO GO TO CREATE EVENT PAGE', this.props)
-    // this.props.navigator.replace({
-    //   component: CreateEvent
-    // })
-  }
   addFriend(){
     const {userObject} = this.props.profile;
     const {activitiesPageState, actions} =this.props;
@@ -57,11 +51,13 @@ class ProfilePage extends Component{
   }
   render(){
     const {userObject} = this.props.profile;
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const dataSource = ds.cloneWithRows(favs);
 
 
     if(userObject){
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      const dataSource = ds.cloneWithRows(userObject.activities);
+      const dataSource = ds.cloneWithRows(favs);
 
       const profileImg = userObject.profileImg;
       console.log('this is looking for the profile image',profileImg)
@@ -69,7 +65,7 @@ class ProfilePage extends Component{
 
 
     return (
-        <View>
+        <View style={{flex: 1}}>
         { userObject !== null ? (  <Swiper
             loop={false}
             showsPagination={false}
@@ -84,59 +80,50 @@ class ProfilePage extends Component{
               <View style={this.viewStyle()}>
                 <Container>
                   <Content>
-                    <View style={styles.profileBox}>
-                      <Thumbnail style={{marginTop: 10, height: 100, width: 100, borderRadius: 50}} source={{uri: userObject.profileImg }} />
-                      <Text style={{textAlign: 'center', fontWeight: '400', fontSize: 25, marginTop: 5}}>{userObject.firstName + " " + userObject.lastName}</Text>
+                  <View style={{flex: 1, backgroundColor: 'grey'}}>
+                    <View style={{flex: 1, flexDirection: 'row', backgroundColor: '#00A8BE', padding: 10}}>
+                      <View style={{flex: 1, backgroundColor:'white', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                      <Thumbnail style={{ height: 140, width: 140, borderRadius: 70}} source={{uri: userObject.profileImg }} />
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 18, marginTop: 5}}>{userObject.firstName + " " + userObject.lastName}</Text>
+                      </View>
+
+                      <View style={{flex: 1, backgroundColor:'white', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+
                       <View style={{flex: 1, flexDirection: 'row'}}>
-                        <TouchableOpacity style={{flex: 1}} onPress={this.addEvent.bind(this)}>
-                        <View style={{flex: 1, backgroundColor: '#00A8BE', alignItems: 'center', padding: 12,
-                         margin: 20, borderRadius: 35}}>
-                         <Text style={{color: 'white', fontWeight: '500', letterSpacing: 1}}>CREATE EVENT</Text>
-                         </View>
-                          </TouchableOpacity>
+                      <Icon style={{fontSize: 35, color: '#00A8FF', flex: 1, textAlign: 'center'}} name='md-people'></Icon>
+                      <View style={{flex: 2}}>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Followers</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>1,023</Text>
                       </View>
-                      <View style={{flex:1, flexDirection: 'row'}}>
-                        <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', padding: 10,
-                      borderColor: 'lightgrey', borderStyle: 'solid', borderWidth: 1, borderLeftWidth: 0, borderRightWidth: 0,marginLeft: 10}}>
-                          <Text>{userObject.connections.length}</Text>
-                          <Text style={{fontSize: 12, color: 'grey'}}>FOLLOWERS</Text>
-                        </View>
-                        <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', padding: 10,
-                      borderColor: 'lightgrey', borderStyle: 'solid', borderWidth: 1}}>
-                          <Text>{userObject.activities.length}</Text>
-                          <Text style={{fontSize: 12, color: 'grey'}}>EVENTS</Text>
-                        </View>
-                        <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center', padding: 10,
-                      borderColor: 'lightgrey', borderStyle: 'solid', borderWidth: 1, borderRightWidth: 0, borderLeftWidth: 0, marginRight: 10}}>
-                          <Text>{userObject.connections.length}</Text>
-                          <Text style={{fontSize: 12, color: 'grey'}}>FOLLOWING</Text>
-                        </View>
                       </View>
-                    </View>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <TouchableOpacity style={{flex: 1}} onPress={this.border}>
-                        <View style={{flex: 1, margin: 10, marginTop: 20}}><Text style={{fontSize: 12, color: 'grey', textAlign: 'center'}}>MY EVENTS</Text></View>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={{flex: 1}} onPress={this.border}>
-                        <View style={{flex: 1, margin: 10, marginTop: 20}}><Text style={{fontSize: 12, color: 'grey', textAlign: 'center'}}>IMAGES</Text></View>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={{flex:1, padding: 20, marginTop:-10}}>
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                      <Icon style={{flex: 1,fontSize: 35, color: '#FF514E', textAlign: 'center'}} name='md-pin'></Icon>
+                      <View style={{flex: 2}}>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pins Created</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>24</Text>
+                      </View>
+                      </View>
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                      <Icon style={{flex: 1,fontSize: 35, color: '#41A36A', textAlign: 'center'}} name='ios-navigate'></Icon>
+                      <View style={{flex: 2}}>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pins Attended</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>5</Text>
+                      </View>
+                      </View>
+                      </View>
+                      </View>
+                      <View style={{flex: 1, backgroundColor: '#00A8BE', padding: 10, marginTop: -10}}>
                       <ListView
-                      dataSource = {dataSource}
-                      renderRow={(rowData) =>
-                        <TouchableOpacity >
-                        <Image source={{uri: 'https://iso.500px.com/wp-content/uploads/2016/04/STROHL__ST_1204-Edit-1500x1000.jpg'}} resizeMode="stretch" style={{width:150, height:150, marginRight: 10, justifyContent:'flex-end', alignItems:'center', padding: 15}}>
-                        </Image>
-                        <Text style={{backgroundColor:'rgba(0,0,0,0)', textAlign:'left', color:'black', fontSize:17, fontWeight:'500'}}>{rowData.activityTitle}</Text>
-
-                        </TouchableOpacity>
-                      }
-                      horizontal = {true}
-                      showsHorizontalScrollIndicator = {false}
-                      onEndReachedThreshold = {500}
+                          dataSource={dataSource}
+                          renderRow={(rowData) => <View style={{backgroundColor: 'white', marginBottom: 5, padding: 10}}>
+                            <Text style={{fontWeight: '400', marginBottom: 5, fontSize: 15}}>{rowData.name}</Text>
+                            <Image source={rowData.image} resizeMode="stretch" style={{width:null, height:200, justifyContent:'flex-end', alignItems:'center'}}>
+                            </Image>
+                            <Text style={{fontWeight: '400', marginTop: 5, fontSize: 12}}>A short description of the activity, popular sports played there, and how busy the area is on a specific day</Text>
+                            </View>
+                          }
                       />
-
+                      </View>
                     </View>
                   </Content>
                 </Container>
@@ -148,8 +135,27 @@ class ProfilePage extends Component{
           </Swiper>
 ) : (
 
-  <View>
-    <Text>You have not login yet</Text>
+  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00A8BE'}}>
+
+<Text style={{fontSize: 20, color: 'white'}}>Login to view profile</Text>
+    <View style={{  flex: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 20,
+   flexDirection: 'row'}}>
+
+      <SocialIcon
+        light
+        type='facebook'
+        onPress={this.props.facebook}
+      />
+
+      <SocialIcon
+        light
+        type='google'
+      />
+
+    </View>
   </View>
 
 )}
@@ -157,6 +163,15 @@ class ProfilePage extends Component{
     )
   }
 }
+
+
+
+
+// ProfilePage.propTypes = {
+//     facebook: PropTypes.func.isRequired,
+//     onSkip: PropTypes.func.isRequired
+// };
+
 
 function mapStateToProps(state) {
   console.log("this is state inside of ProfilePage: ", state)

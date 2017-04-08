@@ -2,6 +2,8 @@ export function populatedActivities(state = {
   nav: "ActivitiesPage",
   fetchingData: false,
   populatedActivities: [],
+  selectedActivity: [],
+  selectedActivityOwner: [],
   categories: ['Baseball','Basketball', 'Beach Volleyball' ,'Hiking', 'Running', 'Soccer','Tennis']
 }, action) {
     switch (action.type) {

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
 import Swiper from 'react-native-swiper';
 import randomcolor from 'randomcolor';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -28,18 +28,19 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
-const LATITUDE_DELTA = 0.009;
+const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class MainPage extends Component {
 
+
   constructor(props){
     super(props);
-    console.log('MAIN PAGE PROPS', this.props)
+      console.log('MAINPAGE PROPSSSSSS', this.props);
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
-        longitude: LATITUDE,
+        longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
@@ -66,7 +67,7 @@ class MainPage extends Component {
 
       },
       (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 0}
     );
       this.watchID = navigator.geolocation.watchPosition((position) => {
       var currentPosition = JSON.stringify(position);
@@ -78,7 +79,6 @@ class MainPage extends Component {
       }});
 
     });
-
   }
   componentWillUnmount (){
   navigator.geolocation.clearWatch(this.watchID);
@@ -92,11 +92,18 @@ class MainPage extends Component {
   createPin(){
     this.props.navigator.push({
       component: CreatePin,
-      backButtonTitle: 'MainPage'
+      backButtonTitle: 'MainPage',
+      passProps: {
+        latitude: this.state.latitude,
+        longitude: this.state.longitude
+      }
     })
   }
   render() {
-
+    // console.log('LAT initialPosition2', this.state.initialPosition.latitude )
+    // // console.log('LONG initialPosition2', this.state.initialPosition.longitude )
+    // console.log('LAT currentPosition2', this.state.currentPosition.latitude )
+    // console.log('LONG currentPosition2', this.state.currentPosition.longitude )
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
@@ -113,18 +120,22 @@ class MainPage extends Component {
       >
        <MapView.Marker
          coordinate={{latitude: this.state.currentPosition.latitude,
-         longitude: this.state.currentPosition.longitude}}
+         longitude: this.state.currentPosition.longitude,
+         latitudeDelta: this.state.currentPosition.latitudeDelta,
+         longitudeDelta: this.state.currentPosition.longitudeDelta,
+         }}
          title='Title'
+
       />
       <View style={{flex: 0, alignItems: 'center'}}>
       <TouchableOpacity onPress={this.category.bind(this)}>
       <Text
-      style={{borderColor: 'white', borderWidth: 1, marginTop: 150, backgroundColor: 'white', width: 275, padding: 15, color: 'grey', textAlign: 'center', fontSize: 18}}
+      style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', marginTop: 150, backgroundColor: '#00A8BE', width: 275, padding: 15, color: 'white', textAlign: 'center', fontSize: 20}}
       placeholder= 'Select a category'
       >Find things to do... {this.state.lastPosition}</Text>
       </TouchableOpacity>
       </View>
-      <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+      {this.props.profile.userObject !== null ? (<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
         <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' }}>Add Location</Text>
         <View style={{flex: 0, marginBottom: 60, backgroundColor: '#00A8BE', width: 50, height: 50,
         alignItems: 'center', justifyContent: 'center', borderRadius: 25}}>
@@ -132,7 +143,7 @@ class MainPage extends Component {
             <Icon style={{fontSize: 35, color: 'white'}} name='md-add'/>
           </TouchableOpacity>
         </View>
-      </View>
+      </View>) : null }
 
       </MapView>
     ) : null}
@@ -140,7 +151,24 @@ class MainPage extends Component {
     )
   }
 }
-var sports = [{name: 'Baseball'}, {name: 'Basketball'},{name: 'Beach Volleyball'},{name: 'Hiking'},{name: 'Running'},{name: 'Soccer'},{name: 'Tennis'}];
+var sports = [{name: 'Baseball',
+              iconName: 'ios-baseball'},
+               {name: 'Basketball',
+             iconName: 'md-basketball'},
+               {name: 'Beach Volleyball',
+             iconName: 'ios-basketball'},
+               {name: 'Football',
+             iconName: 'ios-american-football'},
+               {name: 'Hiking',
+             iconName: 'ios-walk'},
+               {name: 'Running',
+             iconName: 'md-walk'},
+               {name: 'Soccer',
+               iconName: 'ios-football'},
+               {name: 'Tennis',
+             iconName: 'ios-tennisball'}];
+
+
 class Categories extends Component {
   constructor(props){
     super(props);
@@ -149,19 +177,30 @@ class Categories extends Component {
       dataSource: ds.cloneWithRows(sports),
 
     }
+
+  }
+  selectCategory(rowData){
+    console.log('Categories', rowData)
   }
   render(){
     return (
       <View style={{flex: 1}}>
+      <Text style={{marginTop: 45, marginBottom: -40, textAlign: 'center', fontSize: 20, fontWeight: '500', backgroundColor: '#00A8BE', color: 'white', padding: 10}}>Select a category</Text>
       <List>
       <ListView
         dataSource={this.state.dataSource}
         renderRow={(rowData) =>
-                <TouchableOpacity>
+
                 <ListItem>
-                    <Text>{rowData.name}</Text>
+                  <TouchableOpacity onPress={this.selectCategory.bind(this, rowData)}>
+                    <Left>
+                    <Icon style={{fontSize: 30, color: 'grey', marginRight: 10}} name={rowData.iconName}/>
+                    <Text style={{marginTop: 8}}>{rowData.name}</Text>
+                    </Left>
+
+                  </TouchableOpacity>
                 </ListItem>
-                </TouchableOpacity>
+
         }
       />
       </List>
