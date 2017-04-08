@@ -53,8 +53,12 @@ var activitySchema = new mongoose.Schema({
     default: "",
     required: true
   },
-  activityLocation: {
-    type: String,
+  activityLatitude: {
+    type: Number,
+    required: true
+  },
+  activityLongitude: {
+    type: Number,
     required: true
   },
   activityCategory:{

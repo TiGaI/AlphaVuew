@@ -20,7 +20,6 @@ function getRangeofLonLat(lon, lat, kilometer){
           maxLongitude: lon + 111.320*cos(lat + kilometer/110.574)}
 }
 
-
 router.post('/getPingsAroundMe', function(req, res){
 
     var range = getRangeofLonLat(req.body.lon. req.body.lat, 5);
@@ -44,8 +43,8 @@ router.post('/getPingsAroundMe', function(req, res){
 router.post('/createActivity', function(req, res){
 var activity = req.body.activity;
   Activity.findOne({$and: [
-          {'activityLocation.latitude': req.body.activityLocation.latitude},
-          {'activityLocation.longitude': req.body.activityLocation.longitude}]}).exec(function(err, activities){
+          {'activityLatitude': activity.activityLatitude},
+          {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){
 
         if(err){
           console.log(err);
@@ -59,7 +58,8 @@ var activity = req.body.activity;
                 activityTitle: activity.activityTitle,
                 activityDescription: activity.activityDescription,
                 activityCategory: activity.activityCategory,
-                activityLocation: activity.activityLocation,
+                activityLatitude: activity.activityLatitude,
+                activityLongitude: activity.activityLongitude,
                 BTDTUser: []
               })
 
