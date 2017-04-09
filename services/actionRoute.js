@@ -30,8 +30,8 @@ router.post('/checkIn', function(req, res){
                     if(err){
                       console.log(err);
                     }else{
-                      SaveIntoActivityAndUser(req.body.activityID);
-                      CurrentCheckInUser(req.body.activityID);
+                      SaveIntoActivityAndUser(req.body.userID, req.body.activityID);
+                      CurrentCheckInUser(req.body.userID, req.body.activityID);
                     }
 
                 })
@@ -41,7 +41,7 @@ router.post('/checkIn', function(req, res){
           })
 });
 
-function SaveIntoActivityAndUser(activityID){
+function SaveIntoActivityAndUser(userID, activityID){
 
   Activity.findById(activityID, function(err, activity) {
 
@@ -50,14 +50,14 @@ function SaveIntoActivityAndUser(activityID){
     }
 
     if(activity){
-      activity.BTDTUser = [...activity.BTDTUser, ...[req.body.userID]]
+      activity.BTDTUser = [...activity.BTDTUser, ...[userID]]
       activity.save(function(err, activity){
         if (err) {
           res.send(err)
           console.log(err)
         } else {
 
-          User.findById(req.body.userID, function(err, user){
+          User.findById(userID, function(err, user){
             if(user){
 
               user.BTDTactivities = [...user.BTDTactivities, ...[activityID]]
@@ -68,7 +68,6 @@ function SaveIntoActivityAndUser(activityID){
                     console.log(err)
                   } else {
                     res.send('success')
-                    console.log('Nice, you send a friend request.')
                   }
                 })
             }else{
