@@ -29,6 +29,10 @@ export function populatedActivities(state = {
         return Object.assign({}, state, {
           category: action.category
         })
+    case "POPULATED_PINS":
+        return Object.assign({}, state, {
+          populatedActivities: action.populatedActivities
+        })
 
 
     default:

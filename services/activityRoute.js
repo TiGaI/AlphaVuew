@@ -78,6 +78,7 @@ function getRangeofLonLat(lon, lat, kilometer){
 }
 
 router.post('/getPingsAroundMe', function(req, res){
+  console.log('INSIDE GET PING AROUND ME SERVEERRRRRRR')
 
     var range = getRangeofLonLat(req.body.lon, req.body.lat, 5);
 

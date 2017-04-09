@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
-  TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
+  TextInput, TouchableOpacity, NavigatorIOS, TouchableHighlight, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
 import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
 import Swiper from 'react-native-swiper';
 import randomcolor from 'randomcolor';
@@ -13,7 +13,8 @@ import * as loginAction from '../actions/loginAction';
 import MapView from 'react-native-maps';
 
 //Import navigation components
-import CreatePin from './createPin'
+import DetailedPin from './detailedPin';
+
 
 
 var { width, height } = Dimensions.get('window');
@@ -96,14 +97,22 @@ class SelectedCategory extends Component {
       }
     })
   }
+  detailedPin(marker){
+    this.props.navigator.push({
+      component: DetailedPin,
+      backButtonTitle: 'Category Pins',
+      passProps: { marker: marker }
+    })
+  }
   render() {
     // console.log('LAT initialPosition2', this.state.initialPosition.latitude )
     // // console.log('LONG initialPosition2', this.state.initialPosition.longitude )
     // console.log('LAT currentPosition2', this.state.currentPosition.latitude )
     // console.log('LONG currentPosition2', this.state.currentPosition.longitude )
+    console.log('SELECTED CATEGORIESSSSS PROPSSSSSS AFTER ', this.props);
     return(
       <View style={{flex: 1}}>
-      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
+      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 && this.props.activitiesPageState.populatedActivities.length > 0 ? (
 
       <MapView
        resizeMode = "stretch"
@@ -115,15 +124,21 @@ class SelectedCategory extends Component {
           longitudeDelta: this.state.currentPosition.longitudeDelta,
         }}
       >
-       <MapView.Marker
-         coordinate={{latitude: this.state.currentPosition.latitude,
-         longitude: this.state.currentPosition.longitude,
-         latitudeDelta: this.state.currentPosition.latitudeDelta,
-         longitudeDelta: this.state.currentPosition.longitudeDelta,
-         }}
-         title='Title'
+      {this.props.activitiesPageState.populatedActivities.map(marker => (
+      <MapView.Marker
+      coordinate={{latitude: marker.activityLatitude,
+      longitude: marker.activityLongitude
 
-      />
+      }}
+      >
+        <MapView.Callout style={{width:40, height:40}}>
+          <TouchableHighlight
+              onPress={this.detailedPin.bind(this, marker)}>
+            <Text>{marker.activityTitle}</Text>
+          </TouchableHighlight>
+        </MapView.Callout>
+      </MapView.Marker>
+    ))}
       <View style={{flex: 0, alignItems: 'center'}}>
       <TouchableOpacity onPress={this.category.bind(this)}>
       <Text
@@ -132,18 +147,10 @@ class SelectedCategory extends Component {
       >{this.props.category}</Text>
       </TouchableOpacity>
       </View>
-      {this.props.profile.userObject !== null ? (<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
-        <Text style={{fontSize: 12, backgroundColor: 'transparent', fontWeight: '500' }}>Add Location</Text>
-        <View style={{flex: 0, marginBottom: 60, backgroundColor: '#00A8BE', width: 50, height: 50,
-        alignItems: 'center', justifyContent: 'center', borderRadius: 25}}>
-          <TouchableOpacity onPress={this.createPin.bind(this)}>
-            <Icon style={{fontSize: 35, color: 'white'}} name='md-add'/>
-          </TouchableOpacity>
-        </View>
-      </View>) : null }
+
 
       </MapView>
-    ) : null}
+    ) : (<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}><Spinner color='blue' /></View> )}
       </View>
     )
   }

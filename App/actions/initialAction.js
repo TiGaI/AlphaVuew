@@ -23,6 +23,7 @@ export function BTDT(activityID, userID) {
 }
 
 export function createActivity(activityObject) {
+  console.log('INSIDE CREATEACTIVITY ACTIONS', activityObject)
     return dispatch => {
         fetch('http://localhost:8080/createActivity', {
               method: 'POST',
@@ -40,11 +41,11 @@ export function createActivity(activityObject) {
 }
 
 export function getPingAroundMe(category, lon, lat) {
-    console.log('INSIDE GET PING AROUND ME')
+    console.log('INSIDE GET PING AROUND ME', category, lon, lat)
   return dispatch => {
       dispatch(fetching());
 
-      fetch('http://localhost:8080/getPingAroundMe', {
+      fetch('http://localhost:8080/getPingsAroundMe', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -60,7 +61,7 @@ export function getPingAroundMe(category, lon, lat) {
 
             console.log("made it to the promised land: ", responseJson)
 
-
+              dispatch(getActivities(responseJson))
               dispatch(doneFetching())
           })
           .catch((err) => {
@@ -75,6 +76,14 @@ export function selectCategory(category) {
       dispath(getCategory());
   };
 }
+
+export function getCategoryPins(populatedActivities) {
+    return {
+        type: 'POPULATED_PINS',
+        populatedActivities: populatedActivities
+    };
+}
+
 
 export function getActivities(populatedActivities, category) {
     return {

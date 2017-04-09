@@ -68,9 +68,10 @@ class MainPage extends Component {
 
       },
       (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 0}
+      {enableHighAccuracy: true, timeout: 10000, maximumAge: 1000, distanceFilter: 10}
     );
-      this.watchID = navigator.geolocation.watchPosition((position) => {
+    var watchPositionID;
+      watchPositionID= navigator.geolocation.watchPosition((position) => {
       var currentPosition = JSON.stringify(position);
       this.setState({currentPosition: {
         latitude: (position.coords.latitude) / 1.00022741,
@@ -78,11 +79,13 @@ class MainPage extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       }});
-
-    });
+    },
+    (error) => this.setState({ error: error.message }),
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 1000, distanceFilter: 10 }
+  );
   }
   componentWillUnmount (){
-  navigator.geolocation.clearWatch(this.watchID);
+  navigator.geolocation.clearWatch(watchPositionID);
 }
   category(){
     this.props.navigator.push({
@@ -105,10 +108,10 @@ class MainPage extends Component {
     })
   }
   render() {
-    // console.log('LAT initialPosition2', this.state.initialPosition.latitude )
-    // // console.log('LONG initialPosition2', this.state.initialPosition.longitude )
-    // console.log('LAT currentPosition2', this.state.currentPosition.latitude )
-    // console.log('LONG currentPosition2', this.state.currentPosition.longitude )
+    console.log('LAT initialPosition2', this.state.initialPosition.latitude )
+    console.log('LONG initialPosition2', this.state.initialPosition.longitude )
+    console.log('LAT currentPosition2', this.state.currentPosition.latitude )
+    console.log('LONG currentPosition2', this.state.currentPosition.longitude )
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
