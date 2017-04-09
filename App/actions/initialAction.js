@@ -40,6 +40,7 @@ export function createActivity(activityObject) {
 }
 
 export function getPingAroundMe(category, lon, lat) {
+    console.log('INSIDE GET PING AROUND ME')
   return dispatch => {
       dispatch(fetching());
 
