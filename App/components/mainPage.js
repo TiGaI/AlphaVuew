@@ -13,7 +13,8 @@ import * as loginAction from '../actions/loginAction';
 import MapView from 'react-native-maps';
 
 //Import navigation components
-import CreatePin from './createPin'
+import CreatePin from './createPin';
+import SelectedCategory from './selectedCategoryPage';
 
 var image5 = {uri: 'https://www.thisiscolossal.com/wp-content/uploads/2016/03/finger-4.jpg'}
 var image4 = {uri: 'https://cdn.playbuzz.com/cdn/b19cddd2-1b79-4679-b6d3-1bf8d7235b89/93794aec-3f17-47a4-8801-a2716a9c4598_560_420.jpg'}
@@ -86,7 +87,11 @@ class MainPage extends Component {
   category(){
     this.props.navigator.push({
       component: Categories,
-      backButtonTitle: 'Main'
+      backButtonTitle: 'Main',
+      passProps: {
+        latitude: this.state.currentPosition.latitude,
+        longitude: this.state.currentPosition.longitude,
+      }
     })
   }
   createPin(){
@@ -152,21 +157,32 @@ class MainPage extends Component {
   }
 }
 var sports = [{name: 'Baseball',
-              iconName: 'ios-baseball'},
-               {name: 'Basketball',
-             iconName: 'md-basketball'},
+              iconName: 'ios-baseball'
+              },
+              {name: 'Basketball',
+             iconName: 'md-basketball'
+              },
                {name: 'Beach Volleyball',
-             iconName: 'ios-basketball'},
+             iconName: 'ios-basketball'
+              },
                {name: 'Football',
-             iconName: 'ios-american-football'},
+             iconName: 'ios-american-football'
+              },
                {name: 'Hiking',
-             iconName: 'ios-walk'},
+             iconName: 'ios-walk'
+              },
                {name: 'Running',
-             iconName: 'md-walk'},
+             iconName: 'md-walk'
+              },
                {name: 'Soccer',
-               iconName: 'ios-football'},
+               iconName: 'ios-football'
+              },
                {name: 'Tennis',
-             iconName: 'ios-tennisball'}];
+             iconName: 'ios-tennisball'
+
+              },
+
+           ];
 
 
 class Categories extends Component {
@@ -177,10 +193,21 @@ class Categories extends Component {
       dataSource: ds.cloneWithRows(sports),
 
     }
+    console.log('CATEGORIESSSSSSS PROPS', this.props)
 
   }
   selectCategory(rowData){
     console.log('Categories', rowData)
+    this.props.navigator.push({
+      component: SelectedCategory,
+      backButtonTitle: 'Categories Page',
+      passProps: {
+        latitude: this.props.latitude,
+        longitude: this.props.longitude,
+        category: rowData.name
+      }
+    })
+
   }
   render(){
     return (
