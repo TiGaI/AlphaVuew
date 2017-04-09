@@ -43,7 +43,7 @@ export function getPingAroundMe(category, lon, lat) {
   return dispatch => {
       dispatch(fetching());
 
-      fetch('http://localhost:8080/BTDT', {
+      fetch('http://localhost:8080/getPingAroundMe', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -56,6 +56,10 @@ export function getPingAroundMe(category, lon, lat) {
           })
           .then((response) => response.json())
           .then((responseJson) => {
+
+            console.log("made it to the promised land: ", responseJson)
+
+
               dispatch(doneFetching())
           })
           .catch((err) => {

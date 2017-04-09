@@ -13,36 +13,50 @@ const Activity= require('../models/models').Activity;
 // d = R * c (where R is the radius of the Earth)
 
 function getRangeofLonLat(lon, lat, kilometer){
+  console.log(kilometer/110.574)
+  var constant = kilometer/110.574;
 
-  return {minLatitude: lat - kilometer/110.574,
-          maxLatitude: lat +  kilometer/110.574,
-          minLongitude: lon - 111.320*cos(lat + kilometer/110.574),
-          maxLongitude: lon + 111.320*cos(lat + kilometer/110.574)}
+  if(lon > 0){
+    var minLongitude = lon + kilometer/(111.320*Math.cos((lat + constant)* (Math.PI/180)))
+    var maxLongitude = lon - kilometer/(111.320*Math.cos((lat - constant)* (Math.PI/180)))
+  }else{
+    var minLongitude = lon - kilometer/(111.320*Math.cos((lat - constant)* (Math.PI/180)))
+    var maxLongitude = lon + kilometer/(111.320*Math.cos((lat + constant)* (Math.PI/180)))
+  }
+
+  if(lat < 0){
+    var minLatitude = lat + constant
+    var maxLatitude = lat - constant
+  }else{
+    var minLatitude = lat - constant
+    var maxLatitude = lat + constant
+  }
+
+  return {minLatitude: minLatitude,
+          maxLatitude: maxLatitude,
+          minLongitude: minLongitude,
+          maxLongitude: maxLongitude
+}
+
 }
 
 router.post('/getPingsAroundMe', function(req, res){
 
-    var range = getRangeofLonLat(req.body.lon. req.body.lat, 5);
+    var range = getRangeofLonLat(req.body.lon, req.body.lat, 5);
 
     Activity.find({$and: [
           {'activityLatitude': {'$gte': range.minLatitude, '$lt': range.maxLatitude}},
           {'activityLongitude': {'$gte': range.minLongitude, '$lt': range.maxLongitude}},
-          {'activityCategory': {$in : req.body.category}}
+          {'activityCategory' : {'$in': req.body.category}}
         ]}).exec(function(err, activities){
+
+          console.log('activities: ', activities)
 
           if(err){
             console.log(err);
             res.send(err);
             return err
           }
-
-          activities.map((activity, index) => {
-
-              
-
-          })
-
-
           res.send(activities);
           return activities;
     });

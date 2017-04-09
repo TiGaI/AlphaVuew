@@ -31,6 +31,7 @@ router.post('/checkIn', function(req, res){
                       console.log(err);
                     }else{
                       SaveIntoActivityAndUser(req.body.activityID);
+                      CurrentCheckInUser(req.body.activityID);
                     }
 
                 })
