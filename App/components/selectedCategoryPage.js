@@ -13,14 +13,7 @@ import * as loginAction from '../actions/loginAction';
 import MapView from 'react-native-maps';
 
 //Import navigation components
-import CreatePin from './createPin';
-import SelectedCategory from './selectedCategoryPage';
-
-var image5 = {uri: 'https://www.thisiscolossal.com/wp-content/uploads/2016/03/finger-4.jpg'}
-var image4 = {uri: 'https://cdn.playbuzz.com/cdn/b19cddd2-1b79-4679-b6d3-1bf8d7235b89/93794aec-3f17-47a4-8801-a2716a9c4598_560_420.jpg'}
-var image3 = {uri: 'https://iso.500px.com/wp-content/uploads/2016/04/STROHL__ST_1204-Edit-1500x1000.jpg'}
-var image2 = {uri: 'https://static.pexels.com/photos/2855/landscape-mountains-nature-lake.jpg'}
-var image1 = {uri: 'https://upload.wikimedia.org/wikipedia/commons/3/38/Two_dancers.jpg'}
+import CreatePin from './createPin'
 
 
 var { width, height } = Dimensions.get('window');
@@ -32,12 +25,13 @@ const LONGITUDE = 1;
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class MainPage extends Component {
+
+class SelectedCategory extends Component {
 
 
   constructor(props){
     super(props);
-      console.log('MAINPAGE PROPSSSSSS', this.props);
+      console.log('SELECTED CATEGORIESSSSS PROPSSSSSS', this.props);
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
@@ -53,6 +47,8 @@ class MainPage extends Component {
       },
 
     }
+    console.log('TESTING',this.props.category, this.props.longitude, this.props.latitude )
+    this.props.actions.getPingAroundMe(this.props.category, this.props.longitude, this.props.latitude )
   }
   componentDidMount(){
     navigator.geolocation.getCurrentPosition(
@@ -87,11 +83,7 @@ class MainPage extends Component {
   category(){
     this.props.navigator.push({
       component: Categories,
-      backButtonTitle: 'Main',
-      passProps: {
-        latitude: this.state.currentPosition.latitude,
-        longitude: this.state.currentPosition.longitude,
-      }
+      backButtonTitle: 'Main'
     })
   }
   createPin(){
@@ -135,9 +127,9 @@ class MainPage extends Component {
       <View style={{flex: 0, alignItems: 'center'}}>
       <TouchableOpacity onPress={this.category.bind(this)}>
       <Text
-      style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', marginTop: 150, backgroundColor: '#00A8BE', width: 275, padding: 15, color: 'white', textAlign: 'center', fontSize: 20}}
+      style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', marginTop: 45, backgroundColor: '#00A8BE', padding: 15, color: 'white', textAlign: 'center', fontSize: 20, borderRadius: 10}}
       placeholder= 'Select a category'
-      >Find things to do... {this.state.lastPosition}</Text>
+      >{this.props.category}</Text>
       </TouchableOpacity>
       </View>
       {this.props.profile.userObject !== null ? (<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
@@ -156,109 +148,6 @@ class MainPage extends Component {
     )
   }
 }
-var sports = [{name: 'Baseball',
-              iconName: 'ios-baseball'
-              },
-              {name: 'Basketball',
-             iconName: 'md-basketball'
-              },
-               {name: 'Beach Volleyball',
-             iconName: 'ios-basketball'
-              },
-               {name: 'Football',
-             iconName: 'ios-american-football'
-              },
-               {name: 'Hiking',
-             iconName: 'ios-walk'
-              },
-               {name: 'Running',
-             iconName: 'md-walk'
-              },
-               {name: 'Soccer',
-               iconName: 'ios-football'
-              },
-               {name: 'Tennis',
-             iconName: 'ios-tennisball'
-
-              },
-
-           ];
-
-
-class Categories extends Component {
-  constructor(props){
-    super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows(sports),
-
-    }
-    console.log('CATEGORIESSSSSSS PROPS', this.props)
-
-  }
-  selectCategory(rowData){
-    console.log('Categories', rowData)
-    this.props.navigator.push({
-      component: SelectedCategory,
-      backButtonTitle: 'Categories Page',
-      passProps: {
-        latitude: this.props.latitude,
-        longitude: this.props.longitude,
-        category: rowData.name
-      }
-    })
-
-  }
-  render(){
-    return (
-      <View style={{flex: 1}}>
-      <Text style={{marginTop: 45, marginBottom: -40, textAlign: 'center', fontSize: 20, fontWeight: '500', backgroundColor: '#00A8BE', color: 'white', padding: 10}}>Select a category</Text>
-      <List>
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={(rowData) =>
-
-                <ListItem>
-                  <TouchableOpacity onPress={this.selectCategory.bind(this, rowData)}>
-                    <Left>
-                    <Icon style={{fontSize: 30, color: 'grey', marginRight: 10}} name={rowData.iconName}/>
-                    <Text style={{marginTop: 8}}>{rowData.name}</Text>
-                    </Left>
-
-                  </TouchableOpacity>
-                </ListItem>
-
-        }
-      />
-      </List>
-
-      </View>
-    )
-
-
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    margin: 10,
-    backgroundColor: 'transparent',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
-
 
 function mapStateToProps(state) {
     return {
@@ -275,4 +164,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectedCategory);

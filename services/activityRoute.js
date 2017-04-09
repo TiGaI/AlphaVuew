@@ -21,7 +21,7 @@ function getRangeofLonLat(lon, lat, kilometer){
 }
 
 router.post('/getPingsAroundMe', function(req, res){
-
+  console.log('INSIDE GET PING AROUND ME SERVER')
     var range = getRangeofLonLat(req.body.lon. req.body.lat, 5);
 
     Activity.find({$and: [
@@ -38,7 +38,7 @@ router.post('/getPingsAroundMe', function(req, res){
 
           activities.map((activity, index) => {
 
-              
+
 
           })
 
