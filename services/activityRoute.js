@@ -130,6 +130,22 @@ var activity = req.body.activity;
                   console.log(activityNew);
                   User.findById(activityNew.activityCreator, function(err, user){
                     user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
+
+
+                    var newAction = new Action({
+                      user: activityNew.activityCreator,
+                      activity: activityNew._id,
+                      message: activityNew.activityTitle + ' has being created by ' + user.firstName
+                    })
+
+                    newAction.save(function(err){
+                      if (err) {
+                        console.log('error has occur: ',  err)
+                      } else {
+                        console.log('Nice, activity added in the user model')
+                      }
+                    })
+
                     user.save(function(err){
                       if (err) {
                         console.log('error has occur: ',  err)
@@ -138,6 +154,8 @@ var activity = req.body.activity;
                       }
                     })
                   })
+
+
 
                 }
               })
