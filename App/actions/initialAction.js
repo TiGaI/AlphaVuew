@@ -44,7 +44,7 @@ export function getPingAroundMe(category, lon, lat) {
   return dispatch => {
       dispatch(fetching());
 
-      fetch('http://localhost:8080/getPingAroundMe', {
+      fetch('http://localhost:8080/getPingsAroundMe', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
