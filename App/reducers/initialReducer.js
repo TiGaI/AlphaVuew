@@ -25,7 +25,6 @@ export function populatedActivities(state = {
           return Object.assign({}, state, {
               notifications: action.notifications
           });
-
     case "SELECT_POINT":
       return Object.assign({}, state, {
         selectedActivity: action.selectedActivity,

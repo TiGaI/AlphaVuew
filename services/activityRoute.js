@@ -85,7 +85,7 @@ router.post('/getPingsAroundMe', function(req, res){
           {'activityLatitude': {'$gte': range.minLatitude, '$lt': range.maxLatitude}},
           {'activityLongitude': {'$gte': range.minLongitude, '$lt': range.maxLongitude}},
           {'activityCategory' : {'$in': req.body.category}}
-        ]}).exec(function(err, activities){
+        ]}).sort('-createdAt').limit(20).exec(function(err, activities){
 
           console.log('activities: ', activities)
 
@@ -112,53 +112,74 @@ var activity = req.body.activity;
         }
 
         if(!activities){
-          var newActivity = new Activity({
-                activityCreator: activity.activityCreator,
-                activityTitle: activity.activityTitle,
-                activityDescription: activity.activityDescription,
-                activityCategory: activity.activityCategory,
-                activityLatitude: activity.activityLatitude,
-                activityLongitude: activity.activityLongitude,
-                BTDTUser: []
-              })
 
-              newActivity.save(function(err, activityNew){
-                if (err) {
-                  console.log('error has occur: ',  err)
-                } else {
-                  console.log('Nice, you created a file')
-                  console.log(activityNew);
-                  User.findById(activityNew.activityCreator, function(err, user){
-                    user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
+          Activity.find({$and: [
+                  {'createdAt': {'$lt': new Date(Date.now() - 24*60*60*1000)}},
+                  {'activityCreator': activity.activityCreator}
+                ]}).exec(function(err, activities){
 
 
-                    var newAction = new Action({
-                      user: activityNew.activityCreator,
-                      activity: activityNew._id,
-                      message: activityNew.activityTitle + ' has being created by ' + user.firstName
+
+
+              if(activities.length <= 1){
+
+                var newActivity = new Activity({
+                      activityCreator: activity.activityCreator,
+                      activityTitle: activity.activityTitle,
+                      activityDescription: activity.activityDescription,
+                      activityCategory: activity.activityCategory,
+                      activityLatitude: activity.activityLatitude,
+                      activityLongitude: activity.activityLongitude,
+                      activityStartTime: activity.activityStartTime,
+                      activityDuration: activity.activityDuration,
+                      checkInUser: []
                     })
 
-                    newAction.save(function(err){
+                    newActivity.save(function(err, activityNew){
                       if (err) {
                         console.log('error has occur: ',  err)
                       } else {
-                        console.log('Nice, activity added in the user model')
+                        console.log('Nice, you created a file')
+                        console.log(activityNew);
+                        User.findById(activityNew.activityCreator, function(err, user){
+                          user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
+
+
+                          var newAction = new Action({
+                            user: activityNew.activityCreator,
+                            activity: activityNew._id,
+                            message: activityNew.activityTitle + ' has being created by ' + user.firstName
+                          })
+
+                          newAction.save(function(err){
+                            if (err) {
+                              console.log('error has occur: ',  err)
+                            } else {
+                              console.log('Nice, activity added in the user model')
+                            }
+                          })
+
+                          user.save(function(err){
+                            if (err) {
+                              console.log('error has occur: ',  err)
+                            } else {
+                              console.log('Nice, activity added in the user model')
+                            }
+                          })
+                        })
+
+
+
                       }
                     })
 
-                    user.save(function(err){
-                      if (err) {
-                        console.log('error has occur: ',  err)
-                      } else {
-                        console.log('Nice, activity added in the user model')
-                      }
-                    })
-                  })
+              }else{
+                console.log('you have already created two activities');
+                res.send('you already created two activites within this 24 hours!')
+              }
+          })
 
 
-
-                }
-              })
         }else{
           console.log('activities already exist!');
           return null;

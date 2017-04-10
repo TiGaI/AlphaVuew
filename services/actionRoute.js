@@ -5,10 +5,10 @@ var router = express.Router();
 //model
 const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
-const Action= require('../models/models').Action;
+const userNotification= require('../models/models').userNotification;
 
-router.post('/checkIn', function(req, res){
-  Action.find({$and: [
+router.post('/joinActivity', function(req, res){
+  userNotification.find({$and: [
           {user: req.body.userID},
           {activity: req.body.activityID}]})
           .exec(function(res, action){
@@ -21,13 +21,13 @@ router.post('/checkIn', function(req, res){
 
             if(action){
 
-                var newAction = new Action({
+                var newuserNotification = new userNotification({
                   user: action.userID,
                   activity: action.activityID,
-                  message: ' has check in at '
+                  message: ' has join activity at '
                 });
 
-                newAction.save(function(err){
+                newuserNotification.save(function(err){
 
                     if(err){
                       console.log(err);
