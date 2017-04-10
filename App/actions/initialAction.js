@@ -1,8 +1,8 @@
-export function BTDT(activityID, userID) {
+export function joinActivity(activityID, userID) {
     return dispatch => {
         dispatch(fetching());
 
-        fetch('http://localhost:8080/BTDT', {
+        fetch('http://localhost:8080/joinActivity', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
