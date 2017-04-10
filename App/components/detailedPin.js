@@ -23,9 +23,12 @@ class DetailedPin extends Component {
     this.state ={
       join: false
     }
+    console.log('PARAMETERS IN CONSTRUCTOR', this.props.marker._id, this.props.profile.userObject._id)
   }
   join(){
     console.log('I WANT TO JOIN')
+    this.props.actions.joinActivity(this.props.marker._id, this.props.profile.userObject._id)
+    console.log('PARAMETERS IN JOIN', this.props.marker._id, this.props.profile.userObject._id)
     this.setState({
       join: true
     })
@@ -39,12 +42,13 @@ class DetailedPin extends Component {
       <Text>Duration: {this.props.marker.activityDuration} hr(s)</Text>
       <Text>Start Time: {this.props.marker.activityStartTime}</Text>
       <Text>Spots Available {this.props.marker.activityCapacity}</Text>
-      <Button success onPress={this.join.bind(this)}>
+      {this.props.profile.userObject._id !== this.props.marker.activityCreator[0] ? (<View><Button success onPress={this.join.bind(this)}>
                       <Text> Join </Text>
       </Button>
       {this.state.join ? <Button danger onPress={this.join.bind(this)}>
                       <Text> Leave </Text>
-      </Button> : null}
+      </Button> : null}</View>) : null}
+      
       </View>
     )
   }
