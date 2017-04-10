@@ -186,8 +186,8 @@ router.post('/getNotification', function(req, res){
     userNotification.find({$and: [
             {'activity': {'$in': req.body.myactivitiesID}}
           ]})
-     .sort({ createdAt: -1}).limit(15).
-     .exec( function(err, notifications) {
+     .sort({ createdAt: -1}).limit(15)
+     .exec(function(err, notifications) {
         if (err) {
             return {err, notifications}
         }

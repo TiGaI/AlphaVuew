@@ -1,10 +1,3 @@
 dependencies: \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Modules/RCTSourceCode.m \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Modules/RCTSourceCode.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTBridgeModule.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTDefines.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTBridge.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTFrameUpdate.h \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/React/Base/RCTInvalidating.h
+  /Users/junj/horizons/Coup/AlphaVuew/node_modules/react-native/React/Modules/RCTSourceCode.m \
+  /Users/junj/horizons/Coup/AlphaVuew/node_modules/react-native/React/Modules/RCTSourceCode.h
