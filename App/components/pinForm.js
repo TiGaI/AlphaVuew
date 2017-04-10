@@ -25,6 +25,16 @@ import { AppRegistry, ScrollView, StyleSheet,
 
   ], 'nameofthecategory');
 
+  const numberofhours = t.enums.of([
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6'
+
+  ], 'numberofhours');
+
 
 
   var capacity = t.refinement(t.Number, function (n) { return n > 0; });
@@ -36,14 +46,46 @@ import { AppRegistry, ScrollView, StyleSheet,
   var Activity = t.struct({
     activityTitle: t.String,
     activityDescription: t.String,
-    activityCategory: nameofthecategory
+    activityCategory: nameofthecategory,
+    activityCapacity: t.Number,
+    activityStartTime: t.Date,
+    activityDuration: numberofhours
   });
 
   var options = {
-    auto: 'placeholders',
     fields: {
       timeStart: {
         mode: 'time'
+      },
+      activityTitle: {
+        label: 'Title',
+        placeholder: 'Activity Title',
+        error: 'Title Required'
+      },
+      activityDescription: {
+        label: 'Description',
+        placeholder: 'Activity Description',
+        error: 'Description Required'
+      },
+      activityCategory: {
+        label: 'Select Category',
+        placeholder: 'Select a category',
+        error: 'Category Required'
+      },
+      activityCapacity: {
+        label: 'Capacity',
+        placeholder: 'Activity Capacity',
+        error: 'Capacity Required or Must be a number'
+      },
+      activityStartTime: {
+        label: 'Select Start Time',
+        placeholder: 'Select a category',
+        error: 'Start Time Required'
+      },
+      activityDuration: {
+        label: 'Activity Duration',
+        placeholder: 'Select a category',
+        error: 'Duration Required'
       }
     }
   };

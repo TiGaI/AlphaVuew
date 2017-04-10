@@ -7,6 +7,7 @@ const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
 const userNotification= require('../models/models').userNotification;
 
+
 function updatedStatusOnMap() {
       Action.find({$and: [
             {'createdAt': {'$lt': new Date(Date.now() - 3*60*60*1000)}}
@@ -132,6 +133,7 @@ var activity = req.body.activity;
                       activityLongitude: activity.activityLongitude,
                       activityStartTime: activity.activityStartTime,
                       activityDuration: activity.activityDuration,
+                      activityCapacity: activity.activityCapacity,
                       checkInUser: []
                     })
 
@@ -143,7 +145,6 @@ var activity = req.body.activity;
                         console.log(activityNew);
                         User.findById(activityNew.activityCreator, function(err, user){
                           user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
-
 
                           var newuserNotification = new userNotification({
                             user: activityNew.activityCreator,
