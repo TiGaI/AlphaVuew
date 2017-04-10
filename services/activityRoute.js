@@ -75,7 +75,6 @@ function getRangeofLonLat(lon, lat, kilometer){
           minLongitude: minLongitude,
           maxLongitude: maxLongitude
 }
-
 }
 
 router.post('/getPingsAroundMe', function(req, res){
@@ -101,7 +100,7 @@ router.post('/getPingsAroundMe', function(req, res){
 });
 
 router.post('/createActivity', function(req, res){
-var activity = req.body.activity;
+  var activity = req.body.activity;
   Activity.findOne({$and: [
           {'activityLatitude': activity.activityLatitude},
           {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){

@@ -97,7 +97,6 @@ export function getPingAroundMe(category, lon, lat) {
 
 export function selectCategory(category) {
   return dispatch => {
-      dispatch(fetching());
       dispath(getCategory());
   };
 }
@@ -121,6 +120,7 @@ export function notifications(){
 
                 var userObject = [...responseJson];
                 console.log(userObject, ' is the super userObject from getUserNotifications');
+                
                 dispatch(getNotifications(userObject));
                 dispatch(doneFetching())
             })

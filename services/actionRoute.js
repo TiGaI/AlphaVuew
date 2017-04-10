@@ -55,7 +55,6 @@ function SaveIntoActivityAndUser(userID, activityID){
       activity.checkInUser = [...activity.checkInUser, ...[userID]]
       activity.save(function(err, activity){
         if (err) {
-          res.send(err)
           console.log(err)
         } else {
 
@@ -66,10 +65,7 @@ function SaveIntoActivityAndUser(userID, activityID){
 
                 user.save(function(err){
                   if (err) {
-                    res.send(err)
                     console.log(err)
-                  } else {
-                    res.send('success')
                   }
                 })
             }else{
@@ -104,12 +100,10 @@ function AddActionsToNotification(userID, activityID, number){
             newuserNotification.save(function(err){
               if(err){
                 console.log(err);
-                res.send(err);
               }
             })
           }else{
             console.log('notification has already being created!');
-            res.send('notification has already being created!');
           }
         })
 }
@@ -157,7 +151,6 @@ function RemoveUserFromActivityAndUserModel(userID, activityID){
 
       activity.save(function(err, activity){
         if (err) {
-          res.send(err)
           console.log(err)
         } else {
 
@@ -170,10 +163,7 @@ function RemoveUserFromActivityAndUserModel(userID, activityID){
 
                 user.save(function(err){
                   if (err) {
-                    res.send(err)
                     console.log(err)
-                  } else {
-                    res.send('success')
                   }
                 })
 
@@ -193,8 +183,10 @@ function RemoveUserFromActivityAndUserModel(userID, activityID){
 
 router.post('/getNotification', function(req, res){
 
-    userNotification.find({'createdAt': {'$lt': new Date(Date.now() - 3*60*60*1000)}})
-     .sort({ createdAt: -1})
+    userNotification.find({$and: [
+            {'activity': {'$in': req.body.myactivitiesID}}
+          ]})
+     .sort({ createdAt: -1}).limit(15).
      .exec( function(err, notifications) {
         if (err) {
             return {err, notifications}
