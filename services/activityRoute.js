@@ -120,6 +120,9 @@ var activity = req.body.activity;
                 activityCategory: activity.activityCategory,
                 activityLatitude: activity.activityLatitude,
                 activityLongitude: activity.activityLongitude,
+                activityCapacity: activity.activityCapacity,
+                activityDuration: activity.activityDuration,
+                activityStartTime: activity.activityStartTime,
                 BTDTUser: []
               })
 

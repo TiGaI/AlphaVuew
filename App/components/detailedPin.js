@@ -24,9 +24,12 @@ class DetailedPin extends Component {
   render(){
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>{this.props.marker.activityTitle}</Text>
-      <Text>{this.props.marker.activityDescription}</Text>
-      <Text>{this.props.marker.activityCategory}</Text>
+      <Text>Category: {this.props.marker.activityCategory}</Text>
+      <Text>Title: {this.props.marker.activityTitle}</Text>
+      <Text>Description: {this.props.marker.activityDescription}</Text>
+      <Text>Duration: {this.props.marker.activityDuration} hr(s)</Text>
+      <Text>Start Time: {this.props.marker.activityStartTime}</Text>
+      <Text>Spots Available {this.props.marker.activityCapacity}</Text>
       </View>
     )
   }

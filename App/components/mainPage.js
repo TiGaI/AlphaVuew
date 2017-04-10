@@ -29,7 +29,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
-const LATITUDE_DELTA = 0.03;
+const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class MainPage extends Component {

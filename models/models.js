@@ -65,13 +65,23 @@ var activitySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  BTDTUser: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  checkInUser: {
-    type: Number
-  }
+  activityCapacity: {
+    type: Number,
+    required: true
+  },
+  activityDuration: {
+    type: Number,
+    required: true
+  },
+  activityStartTime: {
+    type: Date,
+    required: true
+  },
+  checkInUser: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 },
 { timestamps: true }
 );
+
 
 var actionsSchema = new mongoose.Schema({
   user: {

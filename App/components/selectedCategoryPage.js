@@ -110,6 +110,12 @@ class SelectedCategory extends Component {
     // console.log('LAT currentPosition2', this.state.currentPosition.latitude )
     // console.log('LONG currentPosition2', this.state.currentPosition.longitude )
     console.log('SELECTED CATEGORIESSSSS PROPSSSSSS AFTER ', this.props);
+    if(this.props.profile.userObject === null){
+      var newVariable = 1;
+    }else{
+      var newVariable = this.props.profile.userObject._id
+    }
+
     return(
       <View style={{flex: 1}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 && this.props.activitiesPageState.populatedActivities.length > 0 ? (
@@ -128,14 +134,17 @@ class SelectedCategory extends Component {
       <MapView.Marker
       coordinate={{latitude: marker.activityLatitude,
       longitude: marker.activityLongitude
-
       }}
+      pinColor={(marker.activityCreator[0] === newVariable && marker.activityCreator[0] !== null  && newVariable !== null  ) ? 'green' : 'red'}
       >
-        <MapView.Callout style={{width:40, height:40}}>
-          <TouchableHighlight
+        <MapView.Callout style={{width:120, height:25}}>
+          <TouchableOpacity
               onPress={this.detailedPin.bind(this, marker)}>
-            <Text>{marker.activityTitle}</Text>
-          </TouchableHighlight>
+            <View style={{justifyContent: 'center'}}>
+              <Text style={{fontSize: 15, fontWeight: '500', textAlign: 'left'}}>{marker.activityCategory}</Text>
+              <Text>Spots remaining {marker.activityCapacity}</Text>
+            </View>
+          </TouchableOpacity>
         </MapView.Callout>
       </MapView.Marker>
     ))}
