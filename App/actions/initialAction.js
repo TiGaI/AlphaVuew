@@ -14,6 +14,32 @@ export function joinActivity(activityID, userID) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
+               //socket emit
+                dispatch(doneFetching())
+            })
+            .catch((err) => {
+              console.log('error in populatedActivities -> ', err)
+            });
+    };
+}
+
+export function leaveActivity(activityID, userID) {
+    return dispatch => {
+        dispatch(fetching());
+
+        fetch('http://localhost:8080/leaveActivity', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userID: userID,
+                activityID: activityID
+              })
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              //socket emit
                 dispatch(doneFetching())
             })
             .catch((err) => {

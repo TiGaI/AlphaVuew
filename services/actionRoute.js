@@ -10,7 +10,9 @@ const userNotification= require('../models/models').userNotification;
 router.post('/joinActivity', function(req, res){
   userNotification.find({$and: [
           {user: req.body.userID},
-          {activity: req.body.activityID}]})
+          {activity: req.body.activityID},
+          {actionNumber: 1}
+        ]})
           .exec(function(res, action){
 
             if(err){
@@ -19,7 +21,7 @@ router.post('/joinActivity', function(req, res){
               return err;
             }
 
-            if(action){
+            if(!action){
 
                 var newuserNotification = new userNotification({
                   user: action.userID,
@@ -32,7 +34,7 @@ router.post('/joinActivity', function(req, res){
                       console.log(err);
                     }else{
                       SaveIntoActivityAndUser(req.body.userID, req.body.activityID);
-                      AddActionsToNotification(req.body.userID, req.body.activityID, 3);
+                      AddActionsToNotification(req.body.userID, req.body.activityID, 1);
                     }
                 })
             }else{
@@ -83,7 +85,6 @@ function SaveIntoActivityAndUser(userID, activityID){
 
 }
 
-
 function AddActionsToNotification(userID, activityID, number){
 
   userNotification.find({$and: [
@@ -112,6 +113,83 @@ function AddActionsToNotification(userID, activityID, number){
           }
         })
 }
+
+
+router.post('/leaveActivity', function(req, res){
+  userNotification.find({$and: [
+          {user: req.body.userID},
+          {activity: req.body.userID},
+          {actionNumber: 1}
+        ]}).exec(function(res, action){
+
+            if(err){
+              console.log(err);
+              res.send(err);
+              return err;
+            }
+
+            if(action){
+
+              RemoveUserFromActivityAndUserModel(req.body.userID, req.body.userID);
+              AddActionsToNotification(req.body.userID, req.body.userID, 2);
+
+            }else{
+              console.log('You cannot leave something you can did not join!');
+            }
+          })
+});
+
+
+function RemoveUserFromActivityAndUserModel(userID, activityID){
+
+  Activity.findById(activityID).exec(function(err, activity) {
+
+    if (err) {
+        return {err, activity}
+    }
+
+    if(activity){
+
+      activity.checkInUser = activity.checkInUser.filter(function(item){
+          return item != userID
+      })
+
+
+      activity.save(function(err, activity){
+        if (err) {
+          res.send(err)
+          console.log(err)
+        } else {
+
+          User.findById(userID, function(err, user){
+            if(user){
+
+              user.joinActivities = user.joinActivities.filter(function(item){
+                  return item != activityID
+              })
+
+                user.save(function(err){
+                  if (err) {
+                    res.send(err)
+                    console.log(err)
+                  } else {
+                    res.send('success')
+                  }
+                })
+
+            }else{
+              console.log("Cannot find userID in RemoveUserFromActivityAndUserModel");
+            }
+          });
+        }
+      })
+    }else{
+      console.log('Cannot find activityID in RemoveUserFromActivityAndUserModel')
+    }
+  })
+}
+
+
 
 router.post('/getNotification', function(req, res){
 
