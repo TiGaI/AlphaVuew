@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body, Button } from 'native-base';
 import Swiper from 'react-native-swiper';
 import randomcolor from 'randomcolor';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -20,6 +20,15 @@ class DetailedPin extends Component {
   constructor(props){
     super(props);
     console.log('DETAILED PINS PROPS', this.props)
+    this.state ={
+      join: false
+    }
+  }
+  join(){
+    console.log('I WANT TO JOIN')
+    this.setState({
+      join: true
+    })
   }
   render(){
     return (
@@ -30,6 +39,12 @@ class DetailedPin extends Component {
       <Text>Duration: {this.props.marker.activityDuration} hr(s)</Text>
       <Text>Start Time: {this.props.marker.activityStartTime}</Text>
       <Text>Spots Available {this.props.marker.activityCapacity}</Text>
+      <Button success onPress={this.join.bind(this)}>
+                      <Text> Join </Text>
+      </Button>
+      {this.state.join ? <Button danger onPress={this.join.bind(this)}>
+                      <Text> Leave </Text>
+      </Button> : null}
       </View>
     )
   }
