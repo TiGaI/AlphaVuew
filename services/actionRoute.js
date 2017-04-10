@@ -26,7 +26,7 @@ router.post('/joinActivity', function(req, res){
                 var newuserNotification = new userNotification({
                   user: action.userID,
                   activity: action.activityID,
-                  message: ' has join activity at '
+                  actionNumber: 1
                 });
 
                 newuserNotification.save(function(err){
