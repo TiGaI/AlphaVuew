@@ -40,7 +40,7 @@ export function createActivity(activityObject) {
 }
 
 export function getPingAroundMe(category, lon, lat) {
-    console.log('INSIDE GET PING AROUND ME')
+    console.log('INSIDE GET PING AROUND ME', category, lon, lat)
   return dispatch => {
       dispatch(fetching());
 
@@ -60,7 +60,7 @@ export function getPingAroundMe(category, lon, lat) {
 
             console.log("made it to the promised land: ", responseJson)
 
-
+              dispatch(getActivities(responseJson))
               dispatch(doneFetching())
           })
           .catch((err) => {
@@ -113,7 +113,7 @@ export function getNotifications(notifications) {
     };
 }
 
-export function getActivities(populatedActivities, category) {
+export function getActivities(populatedActivities) {
     return {
         type: 'POPULATED_ACTIVITIES',
         populatedActivities: populatedActivities
