@@ -21,16 +21,23 @@ class DetailedPin extends Component {
     super(props);
     console.log('DETAILED PINS PROPS', this.props)
     this.state ={
-      join: false
+      join: false,
+      leave: false
     }
     console.log('PARAMETERS IN CONSTRUCTOR', this.props.marker._id, this.props.profile.userObject._id)
+  }
+  leave(){
+    this.setState({
+      leave: true
+    })
   }
   join(){
     console.log('I WANT TO JOIN')
     this.props.actions.joinActivity(this.props.marker._id, this.props.profile.userObject._id)
     console.log('PARAMETERS IN JOIN', this.props.marker._id, this.props.profile.userObject._id)
     this.setState({
-      join: true
+      join: true,
+      leave: true
     })
   }
   render(){
@@ -41,14 +48,14 @@ class DetailedPin extends Component {
       <Text>Description: {this.props.marker.activityDescription}</Text>
       <Text>Duration: {this.props.marker.activityDuration} hr(s)</Text>
       <Text>Start Time: {this.props.marker.activityStartTime}</Text>
-      <Text>Spots Available {this.props.marker.activityCapacity}</Text>
-      {this.props.profile.userObject._id !== this.props.marker.activityCreator[0] ? (<View><Button success onPress={this.join.bind(this)}>
+      <Text>Spots Available {this.props.marker.activityCapacity - this.props.marker.checkInUser.length}</Text>
+      {this.props.profile.userObject._id !== this.props.marker.activityCreator[0] ? (<View>{this.state.leave === false ? <Button block success onPress={this.join.bind(this)}>
                       <Text> Join </Text>
-      </Button>
-      {this.state.join ? <Button danger onPress={this.join.bind(this)}>
+      </Button> : null }
+      {this.state.join ? <Button block danger onPress={this.leave.bind(this)}>
                       <Text> Leave </Text>
       </Button> : null}</View>) : null}
-      
+
       </View>
     )
   }
