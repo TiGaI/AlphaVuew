@@ -76,6 +76,43 @@ export function selectCategory(category) {
   };
 }
 
+export function notifications(){
+  return dispatch => {
+        dispatch(fetching());
+        console.log('currentUserID in getNotifications in initialAction: ', currentUserID);
+
+        fetch('http://localhost:8080/getNotification', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userID: currentUserID
+              })
+            }).then((response) => response.json())
+            .then((responseJson) => {
+
+                var userObject = [...responseJson];
+                console.log(userObject, ' is the super userObject from getUserNotifications');
+                dispatch(getNotifications(userObject));
+                dispatch(doneFetching())
+            })
+            .catch((err) => {
+              console.log('error: ', err)
+            });
+    };
+}
+
+
+
+export function getNotifications(notifications) {
+    return {
+        type: 'GET_NOTIFICATIONS',
+        notifications
+    };
+}
+
 export function getActivities(populatedActivities, category) {
     return {
         type: 'POPULATED_ACTIVITIES',

@@ -5,12 +5,13 @@ var router = express.Router();
 //model
 const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
-const Action= require('../models/models').Action;
+const userNotification= require('../models/models').userNotification;
 
-router.post('/checkIn', function(req, res){
-  Action.find({$and: [
+router.post('/joinActivity', function(req, res){
+  userNotification.find({$and: [
           {user: req.body.userID},
-          {activity: req.body.activityID}]}).exec(function(res, action){
+          {activity: req.body.activityID}]})
+          .exec(function(res, action){
 
             if(err){
               console.log(err);
@@ -20,12 +21,13 @@ router.post('/checkIn', function(req, res){
 
             if(action){
 
-                var newAction = new Action({
-                  user: activity.userID,
-                  activity: activity.activityID,
+                var newuserNotification = new userNotification({
+                  user: action.userID,
+                  activity: action.activityID,
+                  message: ' has join activity at '
                 });
 
-                newAction.save(function(err){
+                newuserNotification.save(function(err){
 
                     if(err){
                       console.log(err);
@@ -86,18 +88,17 @@ function SaveIntoActivityAndUser(userID, activityID){
 
 router.post('/getNotification', function(req, res){
 
-    Action.find({toUser: req.body.userID})
+    Action.find({'createdAt': {'$lt': new Date(Date.now() - 3*60*60*1000)}})
      .sort({ createdAt: -1})
-     .populate('fromUser', 'firstName lastName profileImg')
-     .select('fromUser').exec( function(err, friendRequests) {
+     .exec( function(err, notifications) {
         if (err) {
-            return {err, friendRequests}
+            return {err, notifications}
         }
 
-      if(friendRequests){
-          console.log('hoping this is a array: ', friendRequests)
+      if(notifications){
+          console.log('hoping this is a array: ', notifications)
 
-             res.send(friendRequests)
+             res.send(notifications)
 
       }else{
         res.send(null)

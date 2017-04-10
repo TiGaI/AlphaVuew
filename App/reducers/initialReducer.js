@@ -4,6 +4,7 @@ export function populatedActivities(state = {
   populatedActivities: [],
   selectedActivity: [],
   selectedActivityOwner: [],
+  notifications: [],
   categories: ['Baseball','Basketball', 'Beach Volleyball' ,'Hiking', 'Running', 'Soccer','Tennis']
 }, action) {
     switch (action.type) {
@@ -20,6 +21,10 @@ export function populatedActivities(state = {
           return Object.assign({}, state, {
               fetchingData: false
           })
+    case "GET_NOTIFICATIONS":
+          return Object.assign({}, state, {
+              notifications: action.notifications
+          });
     case "SELECT_POINT":
       return Object.assign({}, state, {
         selectedActivity: action.selectedActivity,
