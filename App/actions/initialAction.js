@@ -1,4 +1,5 @@
 export function joinActivity(activityID, userID) {
+  console.log("INSIDE JOIN ACTIVITY", activityID, userID)
     return dispatch => {
         dispatch(fetching());
 

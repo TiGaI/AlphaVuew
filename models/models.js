@@ -104,10 +104,10 @@ var notificationsSchema = new mongoose.Schema({
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
-var userNotification = mongoose.model("userNotification", notificationsSchema);
+var Usernotification = mongoose.model("Usernotification", notificationsSchema);
 
 module.exports = {
   User: User,
   Activity: Activity,
-  userNotification: userNotification
+  Usernotification: Usernotification
 };

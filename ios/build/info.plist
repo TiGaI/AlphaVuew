@@ -3,7 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>LastAccessedDate</key>
+<<<<<<< HEAD
 	<date>2017-04-10T04:14:15Z</date>
+=======
+	<date>2017-04-10T01:56:36Z</date>
+>>>>>>> JoinPin
 	<key>WorkspacePath</key>
 	<string>/Users/junj/horizons/Coup/AlphaVuew/ios/BetaVuew.xcodeproj</string>
 </dict>

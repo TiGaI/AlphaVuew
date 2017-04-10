@@ -5,15 +5,17 @@ var router = express.Router();
 //model
 const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
-const userNotification= require('../models/models').userNotification;
+const Usernotification= require('../models/models').Usernotification;
 
 router.post('/joinActivity', function(req, res){
-  userNotification.find({$and: [
+  Usernotification.findOne({$and: [
           {user: req.body.userID},
           {activity: req.body.activityID},
           {actionNumber: 1}
         ]})
-          .exec(function(res, action){
+          .exec(function(err, action){
+
+            console.log(action)
 
             if(err){
               console.log(err);
@@ -23,18 +25,17 @@ router.post('/joinActivity', function(req, res){
 
             if(!action){
 
-                var newuserNotification = new userNotification({
-                  user: action.userID,
-                  activity: action.activityID,
+                var newUsernotification = new Usernotification({
+                  user: req.body.userID,
+                  activity: req.body.activityID,
                   actionNumber: 1
                 });
 
-                newuserNotification.save(function(err){
+                newUsernotification.save(function(err){
                     if(err){
                       console.log(err);
                     }else{
                       SaveIntoActivityAndUser(req.body.userID, req.body.activityID);
-                      AddActionsToNotification(req.body.userID, req.body.activityID, 1);
                     }
                 })
             }else{
@@ -52,6 +53,7 @@ function SaveIntoActivityAndUser(userID, activityID){
     }
 
     if(activity){
+
       activity.checkInUser = [...activity.checkInUser, ...[userID]]
       activity.save(function(err, activity){
         if (err) {
@@ -83,21 +85,21 @@ function SaveIntoActivityAndUser(userID, activityID){
 
 function AddActionsToNotification(userID, activityID, number){
 
-  userNotification.find({$and: [
+  Usernotification.find({$and: [
           {user: userID},
           {activity: activityID},
           {actionNumber: number}
-        ]}).exec(function(err, userNotification){
+        ]}).exec(function(err, notification){
 
-          if(userNotification){
+          if(notification){
 
-            var newuserNotification = new userNotification({
+            var newUsernotification = new Usernotification({
               user: userID,
               activity: activityID,
               actionNumber: number
             })
 
-            newuserNotification.save(function(err){
+            newUsernotification.save(function(err){
               if(err){
                 console.log(err);
               }
@@ -110,11 +112,12 @@ function AddActionsToNotification(userID, activityID, number){
 
 
 router.post('/leaveActivity', function(req, res){
-  userNotification.find({$and: [
+
+  Usernotification.findOne({$and: [
           {user: req.body.userID},
-          {activity: req.body.userID},
+          {activity: req.body.activityID},
           {actionNumber: 1}
-        ]}).exec(function(res, action){
+        ]}).exec(function(err, action){
 
             if(err){
               console.log(err);
@@ -123,8 +126,8 @@ router.post('/leaveActivity', function(req, res){
             }
 
             if(action){
-
-              RemoveUserFromActivityAndUserModel(req.body.userID, req.body.userID);
+              console.log('i am here')
+              RemoveUserFromActivityAndUserModel(req.body.userID, req.body.activityID);
               AddActionsToNotification(req.body.userID, req.body.userID, 2);
 
             }else{
@@ -183,11 +186,11 @@ function RemoveUserFromActivityAndUserModel(userID, activityID){
 
 router.post('/getNotification', function(req, res){
 
-    userNotification.find({$and: [
+    Usernotification.find({$and: [
             {'activity': {'$in': req.body.myactivitiesID}}
           ]})
      .sort({ createdAt: -1}).limit(15)
-     .exec(function(err, notifications) {
+     .exec( function(err, notifications) {
         if (err) {
             return {err, notifications}
         }
