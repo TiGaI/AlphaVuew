@@ -5,7 +5,7 @@ var router = express.Router();
 //model
 const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
-const Action= require('../models/models').Action;
+const userNotification= require('../models/models').userNotification;
 
 function updatedStatusOnMap() {
       Action.find({$and: [
@@ -121,7 +121,7 @@ var activity = req.body.activity;
 
 
 
-              if(activities.length <= 1){
+              if(activities.length <= 10){
 
                 var newActivity = new Activity({
                       activityCreator: activity.activityCreator,
@@ -145,13 +145,13 @@ var activity = req.body.activity;
                           user.createdActivities = [...user.createdActivities, ...[activityNew._id]]
 
 
-                          var newAction = new Action({
+                          var newuserNotification = new userNotification({
                             user: activityNew.activityCreator,
                             activity: activityNew._id,
-                            message: activityNew.activityTitle + ' has being created by ' + user.firstName
+                            actionNumber: 3
                           })
 
-                          newAction.save(function(err){
+                          newuserNotification.save(function(err){
                             if (err) {
                               console.log('error has occur: ',  err)
                             } else {

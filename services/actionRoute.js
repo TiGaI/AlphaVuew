@@ -28,14 +28,12 @@ router.post('/joinActivity', function(req, res){
                 });
 
                 newuserNotification.save(function(err){
-
                     if(err){
                       console.log(err);
                     }else{
                       SaveIntoActivityAndUser(req.body.userID, req.body.activityID);
                       CurrentCheckInUser(req.body.userID, req.body.activityID);
                     }
-
                 })
             }else{
               console.log('You already join this activity!');
@@ -52,7 +50,7 @@ function SaveIntoActivityAndUser(userID, activityID){
     }
 
     if(activity){
-      activity.BTDTUser = [...activity.BTDTUser, ...[userID]]
+      activity.checkInUser = [...activity.checkInUser, ...[userID]]
       activity.save(function(err, activity){
         if (err) {
           res.send(err)
