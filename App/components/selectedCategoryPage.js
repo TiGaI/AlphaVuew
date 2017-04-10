@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { AppRegistry, ScrollView, StyleSheet, Text, View,
   TextInput, TouchableOpacity, NavigatorIOS, TouchableHighlight, ListView, Dimensions, Alert, AsyncStorage, Image } from 'react-native';
-import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Body } from 'native-base';
+import { Item, Input, Tab, Tabs,Spinner, List, ListItem, Left, Right, Body } from 'native-base';
 import Swiper from 'react-native-swiper';
 import randomcolor from 'randomcolor';
 import Icon from 'react-native-vector-icons/Ionicons';
