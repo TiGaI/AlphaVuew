@@ -14,6 +14,7 @@ import randomcolor from 'randomcolor';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/initialAction';
 import * as loginAction from '../actions/loginAction';
+import Chart from 'react-native-chart';
 
 import { connect } from 'react-redux';
 
@@ -33,9 +34,11 @@ var favs = [
 {name:"ART", homes : 18, image: image5}
 ]
 
+
 class ProfilePage extends Component{
   constructor(props){
     super(props)
+    console.log('PROFILE PAGE PROPS', this.props)
   }
   viewStyle() {
     return {
@@ -53,6 +56,7 @@ class ProfilePage extends Component{
     const {userObject} = this.props.profile;
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     const dataSource = ds.cloneWithRows(favs);
+    const dataSource1 = ds.cloneWithRows(favs);
 
 
     if(userObject){
@@ -63,7 +67,12 @@ class ProfilePage extends Component{
       console.log('this is looking for the profile image',profileImg)
     }
 
-
+    const datas = [[
+    	[0, 1],
+    	[1, 3],
+    	[3, 7],
+    	[4, 9],
+    ]];
     return (
         <View style={{flex: 1}}>
         { userObject !== null ? (  <Swiper
@@ -106,20 +115,65 @@ class ProfilePage extends Component{
                       <View style={{flex: 1, flexDirection: 'row'}}>
                       <Icon style={{flex: 1,fontSize: 35, color: '#41A36A', textAlign: 'center'}} name='ios-navigate'></Icon>
                       <View style={{flex: 2}}>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pins Attended</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pinned Hours</Text>
                       <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>5</Text>
                       </View>
                       </View>
                       </View>
                       </View>
-                      <View style={{flex: 1, backgroundColor: '#00A8BE', padding: 10, marginTop: -10}}>
+                      <View style={{flex: 1, backgroundColor: '#00A8BE', padding: 10, marginTop: 0}}>
                       <ListView
                           dataSource={dataSource}
-                          renderRow={(rowData) => <View style={{backgroundColor: 'white', marginBottom: 5, padding: 10}}>
-                            <Text style={{fontWeight: '400', marginBottom: 5, fontSize: 15}}>{rowData.name}</Text>
-                            <Image source={rowData.image} resizeMode="stretch" style={{width:null, height:200, justifyContent:'flex-end', alignItems:'center'}}>
-                            </Image>
-                            <Text style={{fontWeight: '400', marginTop: 5, fontSize: 12}}>A short description of the activity, popular sports played there, and how busy the area is on a specific day</Text>
+                          renderRow={(rowData) => <View style={{backgroundColor: 'white', marginBottom: 5, padding: 0}}>
+
+                            <Tabs locked={true}>
+                                <Tab heading="Stats" tabBgColor='#00A8BE'>
+                                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', padding: 5, marginTop: 10}}>
+                                  <Text style={{fontWeight: '400', margin: 5, fontSize: 15}}>Date</Text>
+                                    <Chart
+                                      style={{width: 350, height: 200, marginLeft: -10}}
+                                      data={[
+                                      	['Entertainment', 1],
+                                      	['Exercise', 4],
+                                      	['Food', 7],
+                                      	['Hobbies', 3],
+                                        ['Relaxing', 2],
+                                        ['Studying', 1]
+                                      ]}
+
+                                      verticalGridStep={5}
+                                      type="bar"
+                                      showDataPoint={true}
+                                      color={['#FF4A2E']}
+                                     />
+                                  </View>
+
+                                  <View style={{flexDirection: 'row', marginTop: 10}}>
+                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pie'>{"\n"}<Text style={{color: 'black', fontSize: 15}}>Hours</Text></Icon>
+                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pin'>{"\n"}<Text style={{color: 'black', fontSize: 15}}>Pins</Text></Icon>
+                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-calendar'>{"\n"}<Text style={{color: 'black', fontSize: 15}}>Date</Text></Icon>
+                                  </View>
+
+                                </Tab>
+                                <Tab heading="Images" >
+                                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                                <ListView
+                                    dataSource={dataSource1}
+                                    renderRow={(rowData) => <View><Text>{rowData.name}</Text>
+                                    <Image source={rowData.image} resizeMode="stretch" style={{width:150, height:150, marginRight: 5, justifyContent:'flex-end', alignItems:'center'}}>
+                                    </Image>
+                                    </View>
+                                  }
+                                  horizontal = {true}
+                                  showsHorizontalScrollIndicator = {true}
+                                  />
+
+                                  </View>
+                                </Tab>
+                            </Tabs>
+
+
+
                             </View>
                           }
                       />
@@ -190,4 +244,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
-

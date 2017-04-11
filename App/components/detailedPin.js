@@ -49,9 +49,9 @@ class DetailedPin extends Component {
         'Sure you want to delete?',
         'Confirm',
         [
-          {text: 'Yes', onPress: () => this.props.actions.deleteActivity(this.props.marker._id, this.props.marker.activityCreator[0]); this.props.navigator.replace({
+          {text: 'Yes', onPress: () => {this.props.actions.deleteActivity(this.props.marker._id, this.props.marker.activityCreator[0]); this.props.navigator.replace({
             component: MainPage
-          })},
+          })}},
           {text: 'No', onPress: () => console.log('Selected No on Delete Button')}
         ],
         { cancelable: false }

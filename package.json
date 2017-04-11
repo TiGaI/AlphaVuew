@@ -19,6 +19,7 @@
     "randomcolor": "^0.4.4",
     "react": "15.4.2",
     "react-native": "0.42.0",
+    "react-native-chart": "^1.0.8-beta",
     "react-native-elements": "^0.10.3",
     "react-native-fbsdk": "^0.5.0",
     "react-native-maps": "^0.13.0",
