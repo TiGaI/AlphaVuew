@@ -75,7 +75,6 @@ function getRangeofLonLat(lon, lat, kilometer){
           minLongitude: minLongitude,
           maxLongitude: maxLongitude
 }
-
 }
 
 router.post('/getPingsAroundMe', function(req, res){
@@ -100,8 +99,44 @@ router.post('/getPingsAroundMe', function(req, res){
     });
 });
 
+router.post('/editActivity', function(req,res){
+  var activity = req.body.activity;
+  var activityCreatorId = req.body.activityCreatorId;
+  var activityId = req.body.activityID;
+  Activity.findByIdAndUpdate(activityId, activity, {new: true}, function(err, newActivity){
+    if(err){
+      console.log(err);
+      res.send(err);
+      return err
+    } else {
+      res.send(newActivity);
+      console.log(newActivity);
+      return newActivity;
+    }
+
+  })
+});
+
+router.post('/deleteActivity', function(req,res){
+  console.log('INSIDE DELETE ACTIVITY SERVER')
+  var activityCreatorId = req.body.activityCreatorId;
+  var activityId = req.body.activityID;
+  Activity.findByIdAndRemove(activityId, function(err, newActivity){
+    if(err){
+      console.log(err);
+      res.send(err);
+      return err
+    } else {
+      res.send(newActivity);
+      console.log('Actiity Deleted', newActivity);
+      return newActivity;
+    }
+
+  })
+});
+
 router.post('/createActivity', function(req, res){
-var activity = req.body.activity;
+  var activity = req.body.activity;
   Activity.findOne({$and: [
           {'activityLatitude': activity.activityLatitude},
           {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){

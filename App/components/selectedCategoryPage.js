@@ -143,7 +143,6 @@ class SelectedCategory extends Component {
             <View style={{justifyContent: 'center'}}>
               <Text style={{fontSize: 15, fontWeight: '500', textAlign: 'left'}}>{marker.activityCategory}</Text>
               <Text style={{fontSize: 12, fontWeight: '400', textAlign: 'left'}}>{marker.activityTitle}</Text>
-              <Text>Spots remaining {marker.activityCapacity - marker.checkInUser.length}</Text>
             </View>
           </TouchableOpacity>
         </MapView.Callout>

@@ -137,7 +137,7 @@ class MainPage extends Component {
       <Text
       style={{borderColor: 'white', borderWidth: 1,borderColor: 'transparent', marginTop: 150, backgroundColor: '#00A8BE', width: 275, padding: 15, color: 'white', textAlign: 'center', fontSize: 20}}
       placeholder= 'Select a category'
-      >Find things to do... {this.state.lastPosition}</Text>
+      >Start Pinning Your Day</Text>
       </TouchableOpacity>
       </View>
       {this.props.profile.userObject !== null ? (<View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
@@ -156,32 +156,27 @@ class MainPage extends Component {
     )
   }
 }
-var sports = [{name: 'Baseball',
-              iconName: 'ios-baseball'
+var sports = [{name: 'Entertainment',
+              iconName: 'ios-beer'
               },
-              {name: 'Basketball',
-             iconName: 'md-basketball'
-              },
-               {name: 'Beach Volleyball',
-             iconName: 'ios-basketball'
-              },
-               {name: 'Football',
-             iconName: 'ios-american-football'
-              },
-               {name: 'Hiking',
-             iconName: 'ios-walk'
-              },
-               {name: 'Running',
+              {name: 'Excercise',
              iconName: 'md-walk'
               },
-               {name: 'Soccer',
-               iconName: 'ios-football'
+               {name: 'Food',
+             iconName: 'md-pizza'
               },
-               {name: 'Tennis',
-             iconName: 'ios-tennisball'
-
+               {name: 'Hobbies',
+             iconName: 'ios-american-football'
               },
-
+               {name: 'Relaxing',
+             iconName: 'ios-desktop'
+              },
+               {name: 'Studying',
+             iconName: 'ios-book'
+            },
+            {name: 'Relaxing',
+            iconName: 'ios-desktop'
+            },
            ];
 
 

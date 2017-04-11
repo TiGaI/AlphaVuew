@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/ReactCommon/jschelpers/JSCWrapper.cpp \
-  /Users/ericabenojar/Desktop/AlphaVuew/node_modules/react-native/ReactCommon/jschelpers/JSCWrapper.h
+  /Users/junj/horizons/Coup/AlphaVuew/node_modules/react-native/ReactCommon/jschelpers/JSCWrapper.cpp \
+  /Users/junj/horizons/Coup/AlphaVuew/node_modules/react-native/ReactCommon/jschelpers/JSCWrapper.h

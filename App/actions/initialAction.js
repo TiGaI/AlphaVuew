@@ -24,6 +24,55 @@ export function joinActivity(activityID, userID) {
     };
 }
 
+export function editActivity(activityID, activityCreatorId, activityObject){
+  console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
+  return dispatch => {
+    dispatch(fetching());
+    fetch('http://localhost:8080/editActivity', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        activityID: activityID,
+        activityCreatorId: activityCreatorId,
+        activity: activityObject
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+    })
+    .catch((err) => {
+      console.log('Error in editActivity', err)
+    });
+  };
+}
+
+export function deleteActivity(activityID, activityCreatorId){
+  return dispatch => {
+    dispatch(fetching());
+    fetch('http://localhost:8080/deleteActivity', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        activityID: activityID,
+        activityCreatorId: activityCreatorId
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+
+    })
+    .catch((err) => {
+      console.log('Error in editActivity', err)
+    });
+  };
+}
+
+
 export function leaveActivity(activityID, userID) {
     return dispatch => {
         dispatch(fetching());
@@ -98,7 +147,6 @@ export function getPingAroundMe(category, lon, lat) {
 
 export function selectCategory(category) {
   return dispatch => {
-      dispatch(fetching());
       dispath(getCategory());
   };
 }
@@ -122,6 +170,7 @@ export function notifications(){
 
                 var userObject = [...responseJson];
                 console.log(userObject, ' is the super userObject from getUserNotifications');
+
                 dispatch(getNotifications(userObject));
                 dispatch(doneFetching())
             })
