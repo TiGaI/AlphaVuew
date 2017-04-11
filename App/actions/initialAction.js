@@ -102,7 +102,7 @@ export function selectCategory(category) {
   };
 }
 
-export function notifications(){
+export function getnotifications(currentUserID){
   return dispatch => {
         dispatch(fetching());
         console.log('currentUserID in getNotifications in initialAction: ', currentUserID);
@@ -121,8 +121,8 @@ export function notifications(){
 
                 var userObject = [...responseJson];
                 console.log(userObject, ' is the super userObject from getUserNotifications');
-                
-                dispatch(getNotifications(userObject));
+
+                dispatch(getNotificationsAction(userObject));
                 dispatch(doneFetching())
             })
             .catch((err) => {
@@ -132,8 +132,35 @@ export function notifications(){
 }
 
 
+export function saveNotification(){
+  return dispatch => {
 
-export function getNotifications(notifications) {
+        fetch('http://localhost:8080/addActionsToNotification', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userID: currentUserID
+              })
+            }).then((response) => response.json())
+            .then((responseJson) => {
+
+                var userObject = [...responseJson];
+                console.log(userObject, ' is the super userObject from getUserNotifications');
+
+                dispatch(getNotificationsAction(userObject));
+                dispatch(doneFetching())
+            })
+            .catch((err) => {
+              console.log('error: ', err)
+            });
+    };
+}
+
+
+export function getNotificationsAction(notifications) {
     return {
         type: 'GET_NOTIFICATIONS',
         notifications

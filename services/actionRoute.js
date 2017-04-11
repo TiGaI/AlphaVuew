@@ -83,6 +83,11 @@ function SaveIntoActivityAndUser(userID, activityID){
 
 }
 
+router.post('/addActionsToNotification', function(req, res){
+  AddActionsToNotification(req.body.userID, req.body.activityID, req.body.number);
+})
+
+
 function AddActionsToNotification(userID, activityID, number){
 
   Usernotification.find({$and: [

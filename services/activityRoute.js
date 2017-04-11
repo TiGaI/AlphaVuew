@@ -191,4 +191,51 @@ router.post('/createActivity', function(req, res){
 
 });
 
+router.post('/createActivity', function(req, res){
+  var activity = req.body.activity;
+  Activity.findOne({$and: [
+          {'activityLatitude': activity.activityLatitude},
+          {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){
+
+        if(err){
+          console.log(err);
+          res.send(err);
+          return err
+        }
+
+        if(!activities){
+
+          Activity.find({$and: [
+                  {'createdAt': {'$lt': new Date(Date.now() - 24*60*60*1000)}},
+                  {'activityCreator': activity.activityCreator}
+                ]}).exec(function(err, activities){
+
+
+
+
+              if(activities.length <= 10){
+
+
+                      }
+                    })
+
+              }else{
+                console.log('you have already created two activities');
+                res.send('you already created two activites within this 24 hours!')
+              }
+          })
+
+
+        }else{
+          console.log('activities already exist!');
+          return null;
+        }
+
+        res.send(activities);
+        return activities;
+  });
+
+});
+
+
 module.exports = router;
