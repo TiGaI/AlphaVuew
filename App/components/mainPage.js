@@ -159,7 +159,7 @@ class MainPage extends Component {
 var sports = [{name: 'Entertainment',
               iconName: 'ios-beer'
               },
-              {name: 'Excercise',
+              {name: 'Exercise',
              iconName: 'md-walk'
               },
                {name: 'Food',

@@ -72,6 +72,32 @@ export function deleteActivity(activityID, activityCreatorId){
   };
 }
 
+export function getAllUserActivities(userId){
+  console.log('INSIDE GET ALL USER ACTIVITIES', userId)
+  return dispatch => {
+    dispatch(fetching());
+    fetch('http://localhost:8080/getAllUserActivities', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        userId: userId
+      })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // console.log()
+      var x = [];
+      x.push(responseJson);
+      dispatch(getAllUserActivitiesPerDay(x))
+    })
+    .catch((err) => {
+      console.log('Error in getAllUserActivities', err)
+    });
+  };
+}
+
 
 export function leaveActivity(activityID, userID) {
     return dispatch => {
@@ -99,6 +125,7 @@ export function leaveActivity(activityID, userID) {
 }
 
 export function createActivity(activityObject) {
+  console.log('INSIDE CREATE ACTIVITY ACTION',activityObject)
     return dispatch => {
         fetch('http://localhost:8080/createActivity', {
               method: 'POST',
@@ -187,6 +214,13 @@ export function getNotifications(notifications) {
         type: 'GET_NOTIFICATIONS',
         notifications
     };
+}
+
+export function getAllUserActivitiesPerDay(activities){
+  return {
+      type: 'GET_USER_ACTIVITIES',
+      activities: activities
+  }
 }
 
 export function getActivities(populatedActivities) {

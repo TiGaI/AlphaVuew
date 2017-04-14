@@ -5,6 +5,7 @@ export function populatedActivities(state = {
   selectedActivity: [],
   selectedActivityOwner: [],
   notifications: [],
+  allUserActivities: [],
   categories: ['Baseball','Basketball', 'Beach Volleyball' ,'Hiking', 'Running', 'Soccer','Tennis']
 }, action) {
     switch (action.type) {
@@ -33,6 +34,10 @@ export function populatedActivities(state = {
     case "SELECT_CATEGORY":
         return Object.assign({}, state, {
           category: action.category
+        })
+    case 'GET_USER_ACTIVITIES':
+        return Object.assign([], state, {
+          allUserActivities: action.activities
         })
 
 

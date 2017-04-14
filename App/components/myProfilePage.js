@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
   AppRegistry, ScrollView, StyleSheet, View, TextInput, TouchableOpacity, NavigatorIOS,
-  ListView, Alert, Image } from 'react-native';
+  ListView, Alert, Image, Animated } from 'react-native';
 import { Container, Content, Left, Body, Right, Text, ListItem, Thumbnail, Card, CardItem, Tabs, Tab } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Swiper from 'react-native-swiper';
@@ -38,7 +38,7 @@ var favs = [
 class ProfilePage extends Component{
   constructor(props){
     super(props)
-    console.log('PROFILE PAGE PROPS', this.props)
+    this.props.actions.getAllUserActivities(this.props.profile.userObject._id)
   }
   viewStyle() {
     return {
@@ -57,25 +57,163 @@ class ProfilePage extends Component{
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     const dataSource = ds.cloneWithRows(favs);
     const dataSource1 = ds.cloneWithRows(favs);
+    var dataSourceMain = '';
 
+    var x = false;
+    console.log('PROFILE PAGE PROPS IN RENDER', this.props)
 
-    if(userObject){
+    if(this.props.activitiesPageState.allUserActivities.length > 0){
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       const dataSource = ds.cloneWithRows(favs);
 
+      console.log('ALLL ACTIVITIES IN OBJECTSSSSS',this.props.activitiesPageState.allUserActivities[0])
+      var totalHoursArray = [];
+      var totalHoursObjectPerDay = {};
+      var perDayObject = {};
+      var totalStudyingHours = 0;
+      var Exercise = null;
+      var Entertainment = null;
+      var Food = null;
+      var Hobbies = null;
+      var Relaxing = null;
+      var Studying = null;
+
+      // var totalHoursPerDay = 0;
+      this.props.activitiesPageState.allUserActivities[0].map(function(perDay){
+        if(perDay.hasOwnProperty('Entertainment')){
+
+
+          totalHoursPerDay = perDay.Entertainment.reduce(function(totalHours, nextObject){
+            totalHours.activityDuration += nextObject.activityDuration;
+            return totalHours
+          })
+          if(typeof totalHoursPerDay === "object"){
+              perDayObject['Entertainment'] = totalHoursPerDay.activityDuration;
+              Entertainment = {'Entertainment': totalHoursPerDay.activityDuration};
+          }else{
+              perDayObject['Entertainment'] = totalHoursPerDay;
+              Entertainment = {'Entertainment': totalHoursPerDay};
+          }
+        }
+        if(perDay.hasOwnProperty('Exercise')){
+
+
+          totalHoursPerDay = perDay.Exercise.reduce(function(totalHours, nextObject){
+            totalHours.activityDuration += nextObject.activityDuration;
+            return totalHours
+          })
+          if(typeof totalHoursPerDay === "object"){
+              perDayObject['Exercise'] = totalHoursPerDay.activityDuration;
+              Exercise = {'Exercise': totalHoursPerDay.activityDuration};
+          }else{
+              perDayObject['Exercise'] = totalHoursPerDay;
+              Exercise = {'Exercise': totalHoursPerDay};
+          }
+        }
+
+        if(perDay.hasOwnProperty('Food')){
+          console.log('perDay food', perDay)
+
+
+          totalHoursPerDay = perDay.Food.reduce(function(totalHours, nextObject){
+            totalHours.activityDuration += nextObject.activityDuration;
+            return totalHours
+          })
+          if(typeof totalHoursPerDay === "object"){
+              perDayObject['Food'] = totalHoursPerDay.activityDuration;
+              console.log('FOOOOOD', perDayObject )
+              Food = {'Food': totalHoursPerDay.activityDuration};
+          }else{
+              perDayObject['Food'] = totalHoursPerDay;
+              Food = {'Food': totalHoursPerDay};
+          }
+        }
+
+        if(perDay.hasOwnProperty('Hobbies')){
+          console.log('perDay Hobbies', perDay)
+          console.log('perDay Hobbies per hobbbies', perDay.Hobbies)
+
+
+          totalHoursPerDay = perDay.Hobbies.reduce(function(totalHours, nextObject){
+
+            totalHours.activityDuration += nextObject.activityDuration;
+            return totalHours
+          })
+
+          if(typeof totalHoursPerDay === "object"){
+              perDayObject['Hobbies'] = totalHoursPerDay.activityDuration;
+              Hobbies = {'Hobbies': totalHoursPerDay.activityDuration};
+          }else{
+              perDayObject['Hobbies'] = totalHoursPerDay;
+              Hobbies = {'Hobbies': totalHoursPerDay};
+          }
+        }
+
+
+        if(perDay.hasOwnProperty('Relaxing')){
+
+
+          totalHoursPerDay = perDay.Relaxing.reduce(function(totalHours, nextObject){
+            totalHours.activityDuration += nextObject.activityDuration;
+            return totalHours
+          })
+          if(typeof totalHoursPerDay === "object"){
+              perDayObject['Relaxing'] = totalHoursPerDay.activityDuration;
+              Relaxing = {'Relaxing': totalHoursPerDay.activityDuration};
+          }else{
+              perDayObject['Relaxing'] = totalHoursPerDay;
+              Relaxing = {'Relaxing': totalHoursPerDay};
+          }
+        }
+
+
+        if(perDay.hasOwnProperty('Studying')){
+
+
+          totalHoursPerDay = perDay.Studying.reduce(function(totalHours, nextObject){
+            totalHours.activityDuration += nextObject.activityDuration;
+            return totalHours
+          })
+          if(typeof totalHoursPerDay === "object"){
+              perDayObject['Studying'] = totalHoursPerDay.activityDuration;
+              Studying = {'Studying': totalHoursPerDay.activityDuration};
+          }else{
+              perDayObject['Studying'] = totalHoursPerDay;
+              Studying = {'Studying': totalHoursPerDay};
+          }
+
+        }
+          totalHoursObjectPerDay[perDay.date] = {
+              Entertainment,
+              Exercise,
+              Food,
+              Hobbies,
+              Relaxing,
+              Studying,
+              date: perDay.date
+
+
+          };
+          Entertainment = 0;
+          Exercise = 0;
+          Food = 0;
+          Hobbies = 0;
+          Relaxing = 0;
+          Studying = 0;
+      })
+      totalHoursArray.push(totalHoursObjectPerDay);
+      console.log('I HOPPPPPEEEE THIIISSSS WORKSSSS TOOOOO',totalHoursObjectPerDay)
+      console.log('I HOPPPPPEEEE THIIISSSS WORKSSSS',totalHoursArray)
       const profileImg = userObject.profileImg;
-      console.log('this is looking for the profile image',profileImg)
+      console.log('DATAAAAAAAAAAAAAAAAAAAAA', dataSourceMain)
+      x = true;
+      dataSourceMain = ds.cloneWithRows(totalHoursArray[0])
+
     }
 
-    const datas = [[
-    	[0, 1],
-    	[1, 3],
-    	[3, 7],
-    	[4, 9],
-    ]];
     return (
         <View style={{flex: 1}}>
-        { userObject !== null ? (  <Swiper
+        { x === true  && this.props.activitiesPageState.allUserActivities.length === 1 ? (  <Swiper
             loop={false}
             showsPagination={false}
             index={1}>
@@ -123,29 +261,69 @@ class ProfilePage extends Component{
                       </View>
                       <View style={{flex: 1, backgroundColor: '#00A8BE', padding: 10, marginTop: 0}}>
                       <ListView
-                          dataSource={dataSource}
-                          renderRow={(rowData) => <View style={{backgroundColor: 'white', marginBottom: 5, padding: 0}}>
+                          dataSource={dataSourceMain}
+                          renderRow={(rowData) => <View style={{backgroundColor: 'white', marginBottom: 5, padding: 0, backgroundColor: 'grey'}}>
+                          {console.log('ROOOOOOWWWWWWWDDAAAAATTTTAAA',rowData)}
 
                             <Tabs locked={true}>
                                 <Tab heading="Stats" tabBgColor='#00A8BE'>
-                                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', padding: 5, marginTop: 10}}>
-                                  <Text style={{fontWeight: '400', margin: 5, fontSize: 15}}>Date</Text>
-                                    <Chart
-                                      style={{width: 350, height: 200, marginLeft: -10}}
-                                      data={[
-                                      	['Entertainment', 1],
-                                      	['Exercise', 4],
-                                      	['Food', 7],
-                                      	['Hobbies', 3],
-                                        ['Relaxing', 2],
-                                        ['Studying', 1]
-                                      ]}
+                                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', padding: 5, marginTop: 10}}>
+                                  <Text style={{fontWeight: '400', margin: 5, fontSize: 15}}>Date: {rowData.date}</Text>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
+                                        <Text style={styles1.label}>Entertainment.</Text>
+                                        <View style={styles1.data}>
 
-                                      verticalGridStep={5}
-                                      type="bar"
-                                      showDataPoint={true}
-                                      color={['#FF4A2E']}
-                                     />
+                                            <Animated.View style={[styles1.bar, styles1.Entertainment, {width: (rowData.Entertainment === 0) ? (0) : (rowData.Entertainment.Entertainment)*20}]} />
+
+                                          <Text style={styles1.dataNumber}>{(rowData.Entertainment === 0) ? (0) : (rowData.Entertainment.Entertainment)}</Text>
+                                        </View>
+                                  </View>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
+                                        <Text style={styles1.label}>Exercise</Text>
+                                        <View style={styles1.data}>
+
+                                            <Animated.View style={[styles1.bar, styles1.Exercise, {width: (rowData.Exercise === 0) ? (0) : (rowData.Exercise.Exercise)*20}]} />
+
+                                          <Text style={styles1.dataNumber}>{(rowData.Exercise === 0) ? (0) : (rowData.Exercise.Exercise)}</Text>
+                                        </View>
+                                  </View>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
+                                        <Text style={styles1.label}>Food</Text>
+                                        <View style={styles1.data}>
+
+                                            <Animated.View style={[styles1.bar, styles1.Food, {width: (rowData.Food === 0) ? (0) : (rowData.Food.Food)*20}]} />
+
+                                          <Text style={styles1.dataNumber}>{(rowData.Food === 0) ? (0) : (rowData.Food.Food)}</Text>
+                                        </View>
+                                  </View>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
+                                        <Text style={styles1.label}>Hobbies</Text>
+                                        <View style={styles1.data}>
+
+                                            <Animated.View style={[styles1.bar, styles1.Hobbies, {width: (rowData.Hobbies === 0) ? (0) : (rowData.Hobbies.Hobbies)*20}]} />
+
+                                          <Text style={styles1.dataNumber}>{(rowData.Hobbies === 0) ? (0) : (rowData.Hobbies.Hobbies)}</Text>
+                                        </View>
+                                  </View>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
+                                        <Text style={styles1.label}>Relaxing</Text>
+                                        <View style={styles1.data}>
+
+                                            <Animated.View style={[styles1.bar, styles1.Relaxing, {width: (rowData.Relaxing === 0) ? (0) : (rowData.Relaxing.Relaxing)*20}]} />
+
+                                          <Text style={styles1.dataNumber}>{(rowData.Relaxing === 0) ? (0) : (rowData.Relaxing.Relaxing)}</Text>
+                                        </View>
+                                  </View>
+                                  <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
+                                        <Text style={styles1.label}>Studying</Text>
+                                        <View style={styles1.data}>
+
+                                            <Animated.View style={[styles1.bar, styles1.Studying, {width: (rowData.Studying === 0) ? (0) : (rowData.Studying.Studying*10)}]} />
+
+                                          <Text style={styles1.dataNumber}>{(rowData.Studying === 0) ? (0) : (rowData.Studying.Studying)}</Text>
+                                        </View>
+                                  </View>
+
                                   </View>
 
                                   <View style={{flexDirection: 'row', marginTop: 10}}>
@@ -171,11 +349,10 @@ class ProfilePage extends Component{
                                   </View>
                                 </Tab>
                             </Tabs>
-
-
-
                             </View>
+
                           }
+
                       />
                       </View>
                     </View>
@@ -220,11 +397,101 @@ class ProfilePage extends Component{
 
 
 
-
 // ProfilePage.propTypes = {
 //     facebook: PropTypes.func.isRequired,
 //     onSkip: PropTypes.func.isRequired
 // };
+const styles1 = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    marginTop: 6
+  },
+  // Item
+  item: {
+    flexDirection: 'column',
+    marginBottom: 5,
+    paddingHorizontal: 10
+  },
+  label: {
+    color: 'black',
+    flex: 1,
+    fontSize: 12,
+    position: 'relative',
+    top: 2
+  },
+  data: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 5,
+    backgroundColor: 'white'
+  },
+  dataNumber: {
+    color: 'black',
+    fontSize: 7
+  },
+  // Bar
+  bar: {
+    alignSelf: 'flex-start',
+    borderRadius: 0,
+    height: 20,
+    marginRight: 5
+  },
+  Entertainment: {
+    backgroundColor: '#F55443'
+  },
+  Exercise: {
+    backgroundColor: '#FCBD24'
+  },
+  Food: {
+    backgroundColor: '#59838B'
+  },
+  Hobbies: {
+    backgroundColor: '#4D98E4'
+  },
+  Relaxing: {
+    backgroundColor: '#418E50'
+  },
+  Studying: {
+    backgroundColor: '#7B7FEC'
+  },
+  minutes: {
+    backgroundColor: '#3ABAA4'
+  },
+  // controller
+  controller: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 15
+  },
+  button: {
+    flex: 1,
+    position: 'relative',
+    top: -1
+  },
+  chevronLeft: {
+    alignSelf: 'flex-end',
+    height: 28,
+    marginRight: 10,
+    width: 28
+  },
+  chevronRight: {
+    alignSelf: 'flex-start',
+    height: 28,
+    marginLeft: 10,
+    width: 28
+  },
+  date: {
+    color: '#6B7C96',
+    flex: 1,
+    fontSize: 22,
+    fontWeight: '300',
+    height: 28,
+    textAlign: 'center'
+  }
+
+})
 
 
 function mapStateToProps(state) {

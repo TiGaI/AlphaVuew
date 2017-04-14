@@ -13,6 +13,8 @@
     "helmet": "^3.5.0",
     "http": "0.0.0",
     "immutable": "^3.8.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "mongoose": "^4.9.1",
     "native-base": "^2.1.1",
     "path": "^0.12.7",
@@ -30,7 +32,8 @@
     "redux": "^3.5.2",
     "redux-immutable": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "tcomb-form-native": "^0.6.7"
+    "tcomb-form-native": "^0.6.7",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-jest": "19.0.0",
