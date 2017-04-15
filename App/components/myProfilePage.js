@@ -60,13 +60,49 @@ class ProfilePage extends Component{
     var dataSourceMain = '';
 
     var x = false;
-    console.log('PROFILE PAGE PROPS IN RENDER', this.props)
 
+    var countPerDay = {};
+    var countPerDayDate = {};
+    var totalCountArray = [];
+    var totalcount = 0;
     if(this.props.activitiesPageState.allUserActivities.length > 0){
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       const dataSource = ds.cloneWithRows(favs);
 
-      console.log('ALLL ACTIVITIES IN OBJECTSSSSS',this.props.activitiesPageState.allUserActivities[0])
+      // console.log('ALLL ACTIVITIES IN OBJECTSSSSS FIRST',this.props.activitiesPageState.allUserActivities[0])
+
+      this.props.activitiesPageState.allUserActivities[0].map(function(countPins){
+        var categoryArray = ['Entertainment', 'Exercise', 'Food', 'Hobbies', 'Relaxing', 'Studying'];
+        var count = 0;
+
+        for(var key in countPins){
+          // console.log('KEEEYYYY', key)
+          if(countPins.hasOwnProperty(key)){
+            if(key !== 'date'){
+            count = count + countPins[key].length;
+            // console.log('CHEEEECCCCCCKKKK', count, countPins[key].length)
+            }
+          }
+          else {
+            count = 0;
+          }
+
+          countPerDay = {'pinCountPerDay': count};
+          // console.log('count count', count);
+          // console.log('COOOUUNNNNNTTTTTPERRRR DAAAYYYY', countPerDay)
+          // console.log('DAAATTTTEEEEEEEEE',countPins.date)
+
+        }
+        countPerDayDate[countPins.date] = countPerDay;
+        // console.log('COOOUUNNNNNTTTTTPERRRR DAAAYYYY DATEEEEE', countPerDayDate)
+        // totalCountArray.push(countPerDayDate);
+        // console.log('FINAL COUNT ARRAY', totalCountArray);
+        totalcount = count + totalcount ;
+        count = 0;
+        return count;
+      })
+      var countPerDayDateFinal = countPerDayDate;
+      var totalPinCount = totalcount;
       var totalHoursArray = [];
       var totalHoursObjectPerDay = {};
       var perDayObject = {};
@@ -77,6 +113,8 @@ class ProfilePage extends Component{
       var Hobbies = null;
       var Relaxing = null;
       var Studying = null;
+      var totalHoursEachDay = 0;
+      var totalHoursOverTime = 0;
 
       // var totalHoursPerDay = 0;
       this.props.activitiesPageState.allUserActivities[0].map(function(perDay){
@@ -90,10 +128,13 @@ class ProfilePage extends Component{
           if(typeof totalHoursPerDay === "object"){
               perDayObject['Entertainment'] = totalHoursPerDay.activityDuration;
               Entertainment = {'Entertainment': totalHoursPerDay.activityDuration};
+
+
           }else{
               perDayObject['Entertainment'] = totalHoursPerDay;
               Entertainment = {'Entertainment': totalHoursPerDay};
           }
+          totalHoursOverTime = totalHoursPerDay.activityDuration + totalHoursOverTime;
         }
         if(perDay.hasOwnProperty('Exercise')){
 
@@ -109,10 +150,11 @@ class ProfilePage extends Component{
               perDayObject['Exercise'] = totalHoursPerDay;
               Exercise = {'Exercise': totalHoursPerDay};
           }
+          totalHoursOverTime = totalHoursPerDay.activityDuration + totalHoursOverTime;
         }
 
         if(perDay.hasOwnProperty('Food')){
-          console.log('perDay food', perDay)
+
 
 
           totalHoursPerDay = perDay.Food.reduce(function(totalHours, nextObject){
@@ -121,18 +163,16 @@ class ProfilePage extends Component{
           })
           if(typeof totalHoursPerDay === "object"){
               perDayObject['Food'] = totalHoursPerDay.activityDuration;
-              console.log('FOOOOOD', perDayObject )
+
               Food = {'Food': totalHoursPerDay.activityDuration};
           }else{
               perDayObject['Food'] = totalHoursPerDay;
               Food = {'Food': totalHoursPerDay};
           }
+          totalHoursOverTime = totalHoursPerDay.activityDuration + totalHoursOverTime;
         }
 
         if(perDay.hasOwnProperty('Hobbies')){
-          console.log('perDay Hobbies', perDay)
-          console.log('perDay Hobbies per hobbbies', perDay.Hobbies)
-
 
           totalHoursPerDay = perDay.Hobbies.reduce(function(totalHours, nextObject){
 
@@ -147,6 +187,7 @@ class ProfilePage extends Component{
               perDayObject['Hobbies'] = totalHoursPerDay;
               Hobbies = {'Hobbies': totalHoursPerDay};
           }
+          totalHoursOverTime = totalHoursPerDay.activityDuration + totalHoursOverTime;
         }
 
 
@@ -164,6 +205,7 @@ class ProfilePage extends Component{
               perDayObject['Relaxing'] = totalHoursPerDay;
               Relaxing = {'Relaxing': totalHoursPerDay};
           }
+          totalHoursOverTime = totalHoursPerDay.activityDuration + totalHoursOverTime;
         }
 
 
@@ -181,8 +223,10 @@ class ProfilePage extends Component{
               perDayObject['Studying'] = totalHoursPerDay;
               Studying = {'Studying': totalHoursPerDay};
           }
+          totalHoursOverTime = totalHoursPerDay.activityDuration + totalHoursOverTime;
 
         }
+
           totalHoursObjectPerDay[perDay.date] = {
               Entertainment,
               Exercise,
@@ -190,22 +234,28 @@ class ProfilePage extends Component{
               Hobbies,
               Relaxing,
               Studying,
-              date: perDay.date
-
-
+              date: perDay.date,
+              pinCount:  countPerDayDateFinal[perDay.date]
           };
+
           Entertainment = 0;
           Exercise = 0;
           Food = 0;
           Hobbies = 0;
           Relaxing = 0;
           Studying = 0;
+          // console.log('TOTALMOSNOANSFOAOFNAOFNA',totalHoursObjectPerDay )
       })
+      // totalHoursObjectPerDay = {'datePinCount': totalHoursObjectPerDay}
       totalHoursArray.push(totalHoursObjectPerDay);
-      console.log('I HOPPPPPEEEE THIIISSSS WORKSSSS TOOOOO',totalHoursObjectPerDay)
-      console.log('I HOPPPPPEEEE THIIISSSS WORKSSSS',totalHoursArray)
+      // console.log('TOTEOANFOAENOFNAEONFNEFOAENFOENAONFAEOFNAOENF', totalHoursArray)
+      // console.log('I HOPPPPPEEEE THIIISSSS WORKSSSS TOOOOO',totalHoursObjectPerDay)
+      // console.log('I HOPPPPPEEEE THIIISSSS WORKSSSS',totalHoursArray)
+      totalHoursArray.map(function(x){
+        x
+      })
       const profileImg = userObject.profileImg;
-      console.log('DATAAAAAAAAAAAAAAAAAAAAA', dataSourceMain)
+      // console.log('DATAAAAAAAAAAAAAAAAAAAAA', dataSourceMain)
       x = true;
       dataSourceMain = ds.cloneWithRows(totalHoursArray[0])
 
@@ -247,14 +297,14 @@ class ProfilePage extends Component{
                       <Icon style={{flex: 1,fontSize: 35, color: '#FF514E', textAlign: 'center'}} name='md-pin'></Icon>
                       <View style={{flex: 2}}>
                       <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pins Created</Text>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>24</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>{totalPinCount}</Text>
                       </View>
                       </View>
                       <View style={{flex: 1, flexDirection: 'row'}}>
-                      <Icon style={{flex: 1,fontSize: 35, color: '#41A36A', textAlign: 'center'}} name='ios-navigate'></Icon>
+                      <Icon style={{flex: 1,fontSize: 35, color: '#41A36A', textAlign: 'center'}} name='ios-timer'></Icon>
                       <View style={{flex: 2}}>
                       <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 12, marginTop: 5}}>Pinned Hours</Text>
-                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>5</Text>
+                      <Text style={{textAlign: 'left', fontWeight: '400', fontSize: 15, marginTop: 0}}>{totalHoursOverTime}</Text>
                       </View>
                       </View>
                       </View>
@@ -262,74 +312,77 @@ class ProfilePage extends Component{
                       <View style={{flex: 1, backgroundColor: '#00A8BE', padding: 10, marginTop: 0}}>
                       <ListView
                           dataSource={dataSourceMain}
-                          renderRow={(rowData) => <View style={{backgroundColor: 'white', marginBottom: 5, padding: 0, backgroundColor: 'grey'}}>
-                          {console.log('ROOOOOOWWWWWWWDDAAAAATTTTAAA',rowData)}
+                          renderRow={(rowData) => <View style={{backgroundColor: '#0C3048', marginBottom: 5, padding: 0, backgroundColor: 'grey'}}>
+    
 
                             <Tabs locked={true}>
                                 <Tab heading="Stats" tabBgColor='#00A8BE'>
-                                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', padding: 5, marginTop: 10}}>
-                                  <Text style={{fontWeight: '400', margin: 5, fontSize: 15}}>Date: {rowData.date}</Text>
+                                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', padding: 5, backgroundColor: 'lightgrey'}}>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
-                                        <Text style={styles1.label}>Entertainment.</Text>
-                                        <View style={styles1.data}>
+                                        <Text style={styled.label}>Entertainment.</Text>
+                                        <View style={styled.data}>
 
-                                            <Animated.View style={[styles1.bar, styles1.Entertainment, {width: (rowData.Entertainment === 0) ? (0) : (rowData.Entertainment.Entertainment)*20}]} />
+                                            <Animated.View style={[styled.bar, styled.Entertainment, {width: (rowData.Entertainment === 0) ? (5) : (rowData.Entertainment.Entertainment)*20}]} />
 
-                                          <Text style={styles1.dataNumber}>{(rowData.Entertainment === 0) ? (0) : (rowData.Entertainment.Entertainment)}</Text>
+                                          <Text style={styled.dataNumber}>{(rowData.Entertainment === 0) ? (0) : (rowData.Entertainment.Entertainment)}</Text>
                                         </View>
                                   </View>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
-                                        <Text style={styles1.label}>Exercise</Text>
-                                        <View style={styles1.data}>
+                                        <Text style={styled.label}>Exercise</Text>
+                                        <View style={styled.data}>
 
-                                            <Animated.View style={[styles1.bar, styles1.Exercise, {width: (rowData.Exercise === 0) ? (0) : (rowData.Exercise.Exercise)*20}]} />
+                                            <Animated.View style={[styled.bar, styled.Exercise, {width: (rowData.Exercise === 0) ? (5) : (rowData.Exercise.Exercise)*20}]} />
 
-                                          <Text style={styles1.dataNumber}>{(rowData.Exercise === 0) ? (0) : (rowData.Exercise.Exercise)}</Text>
+                                          <Text style={styled.dataNumber}>{(rowData.Exercise === 0) ? (0) : (rowData.Exercise.Exercise)}</Text>
                                         </View>
                                   </View>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
-                                        <Text style={styles1.label}>Food</Text>
-                                        <View style={styles1.data}>
+                                        <Text style={styled.label}>Food</Text>
+                                        <View style={styled.data}>
 
-                                            <Animated.View style={[styles1.bar, styles1.Food, {width: (rowData.Food === 0) ? (0) : (rowData.Food.Food)*20}]} />
+                                            <Animated.View style={[styled.bar, styled.Food, {width: (rowData.Food === 0) ? (5) : (rowData.Food.Food)*20}]} />
 
-                                          <Text style={styles1.dataNumber}>{(rowData.Food === 0) ? (0) : (rowData.Food.Food)}</Text>
+                                          <Text style={styled.dataNumber}>{(rowData.Food === 0) ? (0) : (rowData.Food.Food)}</Text>
                                         </View>
                                   </View>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
-                                        <Text style={styles1.label}>Hobbies</Text>
-                                        <View style={styles1.data}>
+                                        <Text style={styled.label}>Hobbies</Text>
+                                        <View style={styled.data}>
 
-                                            <Animated.View style={[styles1.bar, styles1.Hobbies, {width: (rowData.Hobbies === 0) ? (0) : (rowData.Hobbies.Hobbies)*20}]} />
+                                            <Animated.View style={[styled.bar, styled.Hobbies, {width: (rowData.Hobbies === 0) ? (5) : (rowData.Hobbies.Hobbies)*20}]} />
 
-                                          <Text style={styles1.dataNumber}>{(rowData.Hobbies === 0) ? (0) : (rowData.Hobbies.Hobbies)}</Text>
+                                          <Text style={styled.dataNumber}>{(rowData.Hobbies === 0) ? (0) : (rowData.Hobbies.Hobbies)}</Text>
                                         </View>
                                   </View>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
-                                        <Text style={styles1.label}>Relaxing</Text>
-                                        <View style={styles1.data}>
+                                        <Text style={styled.label}>Relaxing</Text>
+                                        <View style={styled.data}>
 
-                                            <Animated.View style={[styles1.bar, styles1.Relaxing, {width: (rowData.Relaxing === 0) ? (0) : (rowData.Relaxing.Relaxing)*20}]} />
+                                            <Animated.View style={[styled.bar, styled.Relaxing, {width: (rowData.Relaxing === 0) ? (5) : (rowData.Relaxing.Relaxing)*20}]} />
 
-                                          <Text style={styles1.dataNumber}>{(rowData.Relaxing === 0) ? (0) : (rowData.Relaxing.Relaxing)}</Text>
+                                          <Text style={styled.dataNumber}>{(rowData.Relaxing === 0) ? (0) : (rowData.Relaxing.Relaxing)}</Text>
                                         </View>
                                   </View>
                                   <View style={{flex: 1, marginTop: 5, marginBottom: 5}}>
-                                        <Text style={styles1.label}>Studying</Text>
-                                        <View style={styles1.data}>
+                                        <Text style={styled.label}>Studying</Text>
+                                        <View style={styled.data}>
 
-                                            <Animated.View style={[styles1.bar, styles1.Studying, {width: (rowData.Studying === 0) ? (0) : (rowData.Studying.Studying*10)}]} />
+                                            <Animated.View style={[styled.bar, styled.Studying, {width: (rowData.Studying === 0) ? (5) : (rowData.Studying.Studying*10)}]} />
 
-                                          <Text style={styles1.dataNumber}>{(rowData.Studying === 0) ? (0) : (rowData.Studying.Studying)}</Text>
+                                          <Text style={styled.dataNumber}>{(rowData.Studying === 0) ? (0) : (rowData.Studying.Studying)}</Text>
                                         </View>
                                   </View>
 
                                   </View>
 
                                   <View style={{flexDirection: 'row', marginTop: 10}}>
-                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pie'>{"\n"}<Text style={{color: 'black', fontSize: 15}}>Hours</Text></Icon>
-                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pin'>{"\n"}<Text style={{color: 'black', fontSize: 15}}>Pins</Text></Icon>
-                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-calendar'>{"\n"}<Text style={{color: 'black', fontSize: 15}}>Date</Text></Icon>
+                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pie'>{"\n"}<Text style={{color: 'black', fontSize: 12}}>Total Hrs {
+                                      ((rowData.Entertainment === 0) ? (0) : (rowData.Entertainment.Entertainment))+((rowData.Exercise === 0) ? (0) : (rowData.Exercise.Exercise))
+                                      +((rowData.Food === 0) ? (0) : (rowData.Food.Food))+((rowData.Hobbies === 0) ? (0) : (rowData.Hobbies.Hobbies))+
+                                      ((rowData.Relaxing === 0) ? (0) : (rowData.Relaxing.Relaxing))+((rowData.Studying === 0) ? (0) : (rowData.Studying.Studying))
+                                    }</Text></Icon>
+                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-pin'>{"\n"}<Text style={{color: 'black', fontSize: 12}}>Pins {(rowData.pinCount.pinCountPerDay === 0) ? (0) : (rowData.pinCount.pinCountPerDay)}</Text></Icon>
+                                    <Icon style={{flex: 1,fontSize: 30, color: '#FF514E', textAlign: 'center'}} name='md-calendar'>{"\n"}<Text style={{color: 'black', fontSize: 12}}>Date {rowData.date}</Text></Icon>
                                   </View>
 
                                 </Tab>
@@ -338,7 +391,7 @@ class ProfilePage extends Component{
                                 <ListView
                                     dataSource={dataSource1}
                                     renderRow={(rowData) => <View><Text>{rowData.name}</Text>
-                                    <Image source={rowData.image} resizeMode="stretch" style={{width:150, height:150, marginRight: 5, justifyContent:'flex-end', alignItems:'center'}}>
+                                    <Image source={rowData.image} resizeMode="stretch" style={{width:300, height:300, marginRight: 5, justifyContent:'flex-end', alignItems:'center'}}>
                                     </Image>
                                     </View>
                                   }
@@ -401,7 +454,7 @@ class ProfilePage extends Component{
 //     facebook: PropTypes.func.isRequired,
 //     onSkip: PropTypes.func.isRequired
 // };
-const styles1 = StyleSheet.create({
+const styled = StyleSheet.create({
   container: {
     flexDirection: 'column',
     marginTop: 6
@@ -413,7 +466,7 @@ const styles1 = StyleSheet.create({
     paddingHorizontal: 10
   },
   label: {
-    color: 'black',
+    color: 'white',
     flex: 1,
     fontSize: 12,
     position: 'relative',
@@ -424,6 +477,7 @@ const styles1 = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     marginTop: 5,
+    width: 330,
     backgroundColor: 'white'
   },
   dataNumber: {

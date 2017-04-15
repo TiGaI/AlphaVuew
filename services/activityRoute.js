@@ -142,7 +142,7 @@ router.post('/getAllUserActivities', function(req,res){
   var userId = req.body.userId;
   Activity.find({activityCreator: [userId]})
   .sort({activityCategory: +1})
-  .sort({activityStartTime: -1})
+  .sort({activityStartTime: +1})
   .exec(function(err, allActivities){
     if(err){
       console.log(err);
