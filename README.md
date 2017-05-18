@@ -5,10 +5,10 @@ Stack used: node,express,mongoDB,react-native,redux
 Looking for a pickup basketball game? A tennis partner? A substitute player for your volleyball team? 
 AlphaVuew connects you with all type of sport games and players in your neighbourhood so all you have to do is come out and play. It also allows sport organizers a way to find more attendees and filling that roster.
 
-## Version 1 Figma Wireframe
+## Version 1 (Finish)
 ![AlphaVuew](https://github.com/TiGaI/AlphaVuew/blob/master/AlphaVuewVersion1.JPG "AlphaVuew") 
 
-## Version 2 Figma Wireframe
+## Version 2 (In Production)
 ![AlphaVuew](https://github.com/TiGaI/AlphaVuew/blob/master/AlphaVuewVersion2.JPG "AlphaVuew") 
 
 ## App Functionalities
